@@ -2,9 +2,15 @@
 
 using namespace std;
 
+// Time Complexity: O(n*log(n))
+// Space Complexity: O(1) Not including implicit recusrion stack
+// Adaptability: False
+// Stable: False
+// K-Passes: False
+
 void QuickSort(vector<int> &arr, int i, int j)
 {
-    if (j > i)
+    if (i < j)
     {
         int pivot{i}, end{j};
         do
