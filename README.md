@@ -1,2 +1,3 @@
 # DSA
-This repository contains C++ implementations of famous data structures and algorithms
+
+Repository contains C++ implementations of famous data structures and algorithms
