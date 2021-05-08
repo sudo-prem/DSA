@@ -103,14 +103,13 @@ void Graph::RDFS(int start, vector<int> &dfs)
 
 int main()
 {
-    // if indexing starts from 1, add 1 to 'n'
-    // 7 is the max index we will use hence 7 + 1
+    // 1 Based Indexing
     int n = 7 + 1;
     Graph g(n);
-    vector<int> vec1{1, 2, 2, 3, 5, 4};
-    vector<int> vec2{2, 3, 7, 5, 7, 6};
-    for (int i = 0; i < vec1.size(); ++i)
-        g.addEdge(vec1[i], vec2[i]);
+    vector<int> U{1, 2, 2, 3, 5, 4};
+    vector<int> V{2, 3, 7, 5, 7, 6};
+    for (int i = 0; i < U.size(); ++i)
+        g.addEdge(U[i], V[i]);
 
     // Displays Adjacency Matrix
     cout << "Matrix: \n";
