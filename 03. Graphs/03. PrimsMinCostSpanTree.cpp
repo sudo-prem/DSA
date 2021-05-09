@@ -12,7 +12,7 @@ public:
     void addEdge(int u, int v, int w);
     void displayMatrix();
     vector<pair<int, int>> Prims();
-    int Cost(vector<pair<int, int>>);
+    void Cost(vector<pair<int, int>>);
 };
 
 Graph::Graph(int n)
@@ -93,12 +93,15 @@ vector<pair<int, int>> Graph::Prims()
     return res;
 }
 
-int Graph::Cost(vector<pair<int, int>> table)
+void Graph::Cost(vector<pair<int, int>> table)
 {
     int res{};
     for (auto i : table)
+    {
         res += Matrix[i.first][i.second];
-    return res;
+        cout << "(" << i.first << ", " << i.second << ") = " << Matrix[i.first][i.second] << "\n";
+    }
+    cout << "\nTotal Cost: " << res << "\n";
 }
 
 int main()
@@ -120,10 +123,7 @@ int main()
 
     // calculating minimum cost spanning tree
     vector<pair<int, int>> res = g.Prims();
-    for (auto i : res)
-        cout << i.first << " " << i.second << endl;
-    int total = g.Cost(res);
-    cout << "Total Minimum Cost: " << total << endl;
+    g.Cost(res);
 
     return 0;
 }

@@ -12,10 +12,10 @@ public:
     Graph(int n) : V(n) {}
     void addEdge(int u, int v, int w);
     void displayList();
-    vector<pair<pair<int, int>, int>> Kruskals();
-    int Cost(vector<pair<pair<int, int>, int>> table);
     int collapsingFind(int u, vector<int> &Set);
     void weightedUnion(int u, int v, vector<int> &Set);
+    vector<pair<pair<int, int>, int>> Kruskals();
+    void Cost(vector<pair<pair<int, int>, int>> table);
 };
 
 void Graph::addEdge(int u, int v, int w)
@@ -31,6 +31,7 @@ void Graph::displayList()
 }
 
 // returns the root node(parent node) of the given node
+// while collapsing, it changes all the descendant's value to the root node index
 int Graph::collapsingFind(int u, vector<int> &Set)
 {
     int x = u, v{};
@@ -67,13 +68,14 @@ vector<pair<pair<int, int>, int>> Graph::Kruskals()
     int n = List.size(), k{};
     vector<pair<pair<int, int>, int>> res;
     pair<pair<int, int>, int> minIndex;
+    int minValue;
     // Disjoint set for detecting cycle
     vector<int> Set(V, -1), visited(n, 0);
     int i = 0;
     while (i < V - 2)
     {
+        minValue = INT_MAX;
         // finding the minimum weight
-        int minValue = INT_MAX;
         for (int j = 0; j < n; ++j)
         {
             if (!visited[j])
@@ -101,12 +103,15 @@ vector<pair<pair<int, int>, int>> Graph::Kruskals()
     return res;
 }
 
-int Graph::Cost(vector<pair<pair<int, int>, int>> table)
+void Graph::Cost(vector<pair<pair<int, int>, int>> table)
 {
     int res{};
     for (auto i : table)
+    {
         res += i.second;
-    return res;
+        cout << "(" << i.first.first << ", " << i.first.second << ") = " << i.second << "\n";
+    }
+    cout << "\nTotal Cost: " << res << '\n';
 }
 
 int main()
@@ -128,11 +133,7 @@ int main()
 
     // calculating minimum cost spanning tree
     vector<pair<pair<int, int>, int>> res = g.Kruskals();
-    for (auto i : res)
-        cout << "(" << i.first.first << ", " << i.first.second << ") = " << i.second << "\n";
-    cout << '\n';
-    int total = g.Cost(res);
-    cout << "Total Minimum Cost: " << total << endl;
+    g.Cost(res);
 
     return 0;
 }
