@@ -7,8 +7,9 @@ using namespace std;
 // Stable: True
 // K-Passes: False
 
-// Similar to CountSort but this has linked representation
-
+// Same as CountSort but this has linked representation
+// CountSort saves frequency of appearance
+// Bin/Bucket sort stores the value as a node
 class Node
 {
 public:

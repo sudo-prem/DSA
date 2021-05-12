@@ -43,8 +43,11 @@ int pos(int n, int i)
 
 void RadixSort(vector<int> &arr)
 {
+    // Since we are dealing with decimal numbers
+    // we only need 10 slots in a vector
     vector<Node *> radix(10, NULL);
     int max = FindMax(arr), count{};
+    // here the count is called as base
     int count = DigitCount(max);
     for (int i = 0; i < count; ++i)
     {
@@ -63,7 +66,7 @@ void RadixSort(vector<int> &arr)
             }
         }
         int k{};
-        // Updating the given list's values
+        // Updating the list's values
         for (int j = 0; j < 10; ++j)
         {
             Node *temp = radix[j];

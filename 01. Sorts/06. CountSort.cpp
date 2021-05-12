@@ -20,11 +20,14 @@ void CountSort(vector<int> &arr)
 {
     int max = FindMax(arr);
     vector<int> counter(max + 1, 0);
+    // Hashing the values to counter
     for (int i = 0; i < arr.size(); ++i)
         counter[arr[i]]++;
+    // Adding back the values to the arr
     int k{};
     for (int i = 0; i < counter.size(); ++i)
         if (counter[i] != 0)
+            // Adds counter[i] number of times i to arr
             while (counter[i]--)
                 arr[k++] = i;
 }

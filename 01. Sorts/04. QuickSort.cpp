@@ -43,7 +43,7 @@ void QuickSort(vector<int> &arr)
 int main()
 {
     // Last element is taken as dummy element
-    vector<int> arr{8, 2, 4, 1, 3, -6, 7, 8, INT_MAX};
+    vector<int> arr{8, 2, 4, 1, 3, -6, 9, 7, 8, INT_MAX};
     QuickSort(arr);
     // Printing all the elements except the last dummy element
     for (int i = 0; i < arr.size() - 1; ++i)

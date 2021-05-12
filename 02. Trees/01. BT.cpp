@@ -148,7 +148,7 @@ void BinaryTree::inOrderI()
 {
     Node *t = root;
     stack<Node *> st;
-    while (t || !st.empty())
+    while (t or !st.empty())
     {
         if (t)
         {
