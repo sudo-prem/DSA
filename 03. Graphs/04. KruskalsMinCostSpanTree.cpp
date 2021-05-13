@@ -64,7 +64,7 @@ void Graph::weightedUnion(int u, int v, vector<int> &Set)
 
 vector<pair<pair<int, int>, int>> Graph::Kruskals()
 {
-    // n stores the number of edges in the list
+    // n stores the number of vertices in the graph
     int n = List.size(), k{};
     vector<pair<pair<int, int>, int>> res;
     pair<pair<int, int>, int> minIndex;
