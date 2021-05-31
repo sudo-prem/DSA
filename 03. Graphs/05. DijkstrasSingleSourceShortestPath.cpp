@@ -70,6 +70,8 @@ vector<int> Graph::shortestPath(int source)
     {
         int curr = minDist(res, visited);
         for (int i = 0; i < n; ++i)
+            // Here we neglect the case of negative edges
+            // in which case dijkstra's algo wouldnt work
             if (Matrix[curr][i] > 0)
             {
                 int temp = res[curr] + Matrix[curr][i];
