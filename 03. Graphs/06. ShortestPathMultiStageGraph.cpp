@@ -12,7 +12,7 @@ public:
     void addEdge(int u, int v, int w);
     void Display();
     void displayPath(vector<int> res);
-    pair<int, int> findMin(int curr, vector<int> cost);
+    pair<int, int> findMin(int curr, vector<int> &cost);
     vector<int> shortestPath();
 };
 
@@ -47,10 +47,9 @@ void MultiStageGraph::displayPath(vector<int> res)
         sum += Matrix[i][res[j]];
         i = res[j];
     }
-    cout << "Total Sum: " << sum << endl;
 }
 
-pair<int, int> MultiStageGraph::findMin(int curr, vector<int> cost)
+pair<int, int> MultiStageGraph::findMin(int curr, vector<int> &cost)
 {
     int n = Matrix.size(), minValue = INT_MAX, minIndex{};
     // i starts from curr + 1
@@ -68,13 +67,12 @@ pair<int, int> MultiStageGraph::findMin(int curr, vector<int> cost)
 
 vector<int> MultiStageGraph::shortestPath()
 {
-    int source = 0, sink = Matrix.size(), n = Matrix.size();
+    int source = 0, sink = Matrix.size() - 1, n = Matrix.size();
     vector<int> parent(n, 0);
     vector<int> cost(n, 0);
     vector<int> res(stages, 0);
 
-    cost[sink] = 0;
-    parent[sink] = sink;
+    parent[sink - 1] = sink;
 
     // we want this for loop to execute (sink - 1) times
     for (int i = sink - 1; i >= 0; i--)
@@ -84,16 +82,18 @@ vector<int> MultiStageGraph::shortestPath()
         parent[i] = curr.second;
     }
 
+    // here we assume that the source is 0
     res[0] = 0;
     for (int i = 1; i < stages; ++i)
         res[i] = parent[res[i - 1]];
 
+    cout << "The cost of Shortest Path: " << cost[0] << endl;
     return res;
 }
 
 int main()
 {
-    int n = 9, stages = 4;
+    int n = 7 + 1, stages = 4;
     vector<int> U{0, 0, 0, 1, 1, 2, 2, 3, 3, 3, 4, 5, 6};
     vector<int> V{1, 2, 3, 4, 5, 4, 5, 4, 5, 6, 7, 7, 7};
     vector<int> W{2, 1, 3, 2, 3, 6, 7, 6, 8, 9, 6, 4, 5};
@@ -105,6 +105,7 @@ int main()
 
     int source = 0;
     vector<int> res = G.shortestPath();
+    cout << endl;
     G.displayPath(res);
 
     return 0;
