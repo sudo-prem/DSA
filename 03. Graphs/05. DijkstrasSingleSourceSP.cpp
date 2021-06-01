@@ -57,13 +57,10 @@ int Graph::minDist(vector<int> vec, vector<bool> visited)
 vector<int> Graph::shortestPath(int source)
 {
     int n = Matrix.size();
-    vector<int> res{};
+    vector<int> res(n, INT_MAX);
     vector<bool> visited(n, false);
     int visitedCount{};
 
-    // Updating all the Values of res to INT_MAX
-    for (int i = 0; i < n; ++i)
-        res.push_back(INT_MAX);
     res[source] = 0;
 
     while (visitedCount != n)
@@ -71,7 +68,7 @@ vector<int> Graph::shortestPath(int source)
         int curr = minDist(res, visited);
         for (int i = 0; i < n; ++i)
             // Here we neglect the case of negative edges
-            // in which case dijkstra's algo wouldnt work
+            // Dijkstra may or may not work for negative edges
             if (Matrix[curr][i] > 0)
             {
                 int temp = res[curr] + Matrix[curr][i];
