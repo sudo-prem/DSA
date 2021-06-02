@@ -12,7 +12,7 @@ public:
     void Display();
     void displayDist(vector<int> res, int source);
     int minDist(vector<int> vec, vector<bool> visited);
-    vector<int> shortestPath(int source);
+    vector<int> Dijkstra(int source);
 };
 
 Graph::Graph(int n)
@@ -54,7 +54,7 @@ int Graph::minDist(vector<int> vec, vector<bool> visited)
     return minIndex;
 }
 
-vector<int> Graph::shortestPath(int source)
+vector<int> Graph::Dijkstra(int source)
 {
     int n = Matrix.size();
     vector<int> res(n, INT_MAX);
@@ -95,7 +95,7 @@ int main()
         G.addEdge(U[i], V[i], W[i]);
 
     int source = 0;
-    vector<int> res = G.shortestPath(source);
+    vector<int> res = G.Dijkstra(source);
     G.displayDist(res, source);
 
     return 0;
