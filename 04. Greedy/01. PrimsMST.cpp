@@ -47,7 +47,8 @@ vector<pair<int, int>> Graph::Prims()
     int size = Matrix.size();
     vector<pair<int, int>> res;
     vector<int> track(size + 1, INT_MAX);
-    // Find the Minimum value from lower or upper triangle
+    // Find the Minimum value from upper or lower triangle
+    // because we have considered the graph to be undirected
     int minValue{INT_MAX};
     pair<int, int> minIndex;
     for (int i = 1; i < size; ++i)
@@ -69,7 +70,7 @@ vector<pair<int, int>> Graph::Prims()
             else
                 track[i] = minIndex.second;
     // since we already added two values into track,
-    // we can run the loop only till size-2
+    // we should run the repeating steps only till size-2
     for (int n = 1; n < size - 2; ++n)
     {
         minValue = INT_MAX;
