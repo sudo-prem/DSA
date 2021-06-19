@@ -8,36 +8,36 @@ using namespace std;
 // Stable: False
 // K-Passes: False
 
-void QuickSort(vector<int> &arr, int i, int j)
+void Partition(vector<int> &arr, int i, int j)
 {
     if (i < j)
     {
         int pivot{i}, end{j};
+        // Move i from pivot, j from inifinity
+        i++;
+        j--;
         do
         {
-            do
-            {
+            while (arr[i] <= arr[pivot])
                 i++;
-            } while (arr[i] <= arr[pivot]);
-            do
-            {
+            while (arr[j] > arr[pivot])
                 j--;
-            } while (arr[j] > arr[pivot]);
             if (i < j)
                 swap(arr[i], arr[j]);
         } while (i < j);
+        // Swap the pivot to its position
         swap(arr[pivot], arr[j]);
-        // Here the jth element which is already in its sorted postion,
-        // acts as the last dummy element for the left side QuickSort
-        QuickSort(arr, pivot, j);
-        // since end still holds the last dummy element we can directly pass it
-        QuickSort(arr, j + 1, end);
+        // Here jth element is already in its sorted postion,
+        // acts as the last dummy element for the left side Partition
+        Partition(arr, pivot, j);
+        // since 'end' still holds the last dummy element we can directly pass it
+        Partition(arr, j + 1, end);
     }
 }
 
 void QuickSort(vector<int> &arr)
 {
-    QuickSort(arr, 0, arr.size() - 1);
+    Partition(arr, 0, arr.size() - 1);
 }
 
 int main()
