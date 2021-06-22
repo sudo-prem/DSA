@@ -1,8 +1,8 @@
 // Problem Link:
-// https://leetcode.com/problems/palindrome-partitioning/solution/
+// https://leetcode.com/problems/palindrome-partitioning/
 
-// TC: O()
-// SC: O()
+// TC: O(n!)
+// SC: O(n)
 
 #include <bits/stdc++.h>
 using namespace std;
