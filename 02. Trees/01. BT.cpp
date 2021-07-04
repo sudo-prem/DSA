@@ -7,6 +7,9 @@ public:
     int data;
     Node *left;
     Node *right;
+
+    Node() {}
+    Node(int _data) : data(_data), left(NULL), right(NULL) {}
 };
 
 class BinaryTree
@@ -31,9 +34,9 @@ public:
     void postOrderI();
     void levelOrder();
     // Generates a tree from given pre-in/pos-in arrays
-    Node *generateFromPre(vector<int> &, vector<int> &, int, int);
+    Node *generateFromPre(vector<int> &, vector<int> &, unordered_map<int, int> &, int &, int, int);
     Node *generateFromPre(vector<int> &, vector<int> &);
-    Node *generateFromPost(vector<int> &, vector<int> &, int, int);
+    Node *generateFromPost(vector<int> &, vector<int> &, unordered_map<int, int> &, int &, int, int);
     Node *generateFromPost(vector<int> &, vector<int> &);
     // notice that all the Sum, Count, Height functions use post order form (left, right, root)
     int Sum(Node *);
@@ -215,55 +218,60 @@ void BinaryTree::levelOrder()
     }
 }
 
-Node *BinaryTree::generateFromPre(vector<int> &preorder, vector<int> &inorder, int inStart, int inEnd)
+Node *BinaryTree::generateFromPre(vector<int> &preorder, vector<int> &inorder, unordered_map<int, int> &hash, int &currPos, int start, int end)
 {
-    static int preIndex = 0;
-    if (inStart > inEnd)
+    if (start > end)
         return NULL;
-    Node *root = new Node;
-    root->data = preorder[preIndex];
-    int splitIndex{-1};
-    for (int i = inStart; i <= inEnd; ++i)
-        if (inorder[i] == preorder[preIndex])
-        {
-            splitIndex = i;
-            break;
-        }
-    preIndex++;
-    root->left = generateFromPre(preorder, inorder, inStart, splitIndex - 1);
-    root->right = generateFromPre(preorder, inorder, splitIndex + 1, inEnd);
+
+    int pivot = hash[preorder[currPos]];
+    currPos++;
+
+    Node *root = new Node(inorder[pivot]);
+    root->left = generateFromPre(preorder, inorder, hash, currPos, start, pivot - 1);
+    root->right = generateFromPre(preorder, inorder, hash, currPos, pivot + 1, end);
+
     return root;
 }
 
 Node *BinaryTree::generateFromPre(vector<int> &preorder, vector<int> &inorder)
 {
-    return generateFromPre(preorder, inorder, 0, (preorder.size() - 1));
+    int currPos = 0;
+    int start = 0;
+    int end = inorder.size() - 1;
+
+    unordered_map<int, int> hash{};
+    for (int i = 0; i <= end; ++i)
+        hash[inorder[i]] = i;
+
+    return generateFromPre(preorder, inorder, hash, currPos, start, end);
 }
 
-Node *BinaryTree::generateFromPost(vector<int> &postorder, vector<int> &inorder, int inStart, int inEnd)
+Node *BinaryTree::generateFromPost(vector<int> &inorder, vector<int> &postorder, unordered_map<int, int> &hash, int &currPos, int start, int end)
 {
-    static int postIndex = inEnd;
-    if (inStart > inEnd)
+    if (start > end)
         return NULL;
-    Node *root = new Node;
-    root->left = root->right = NULL;
-    root->data = postorder[postIndex];
-    int splitIndex{-1};
-    for (int i = inStart; i <= inEnd; ++i)
-        if (inorder[i] == root->data)
-        {
-            splitIndex = i;
-            break;
-        }
-    postIndex--;
-    root->right = generateFromPost(postorder, inorder, splitIndex + 1, inEnd);
-    root->left = generateFromPost(postorder, inorder, inStart, splitIndex - 1);
+
+    int pivot = hash[postorder[currPos]];
+
+    currPos--;
+    Node *root = new Node(inorder[pivot]);
+    root->right = generateFromPost(inorder, postorder, hash, currPos, pivot + 1, end);
+    root->left = generateFromPost(inorder, postorder, hash, currPos, start, pivot - 1);
+
     return root;
 }
 
 Node *BinaryTree::generateFromPost(vector<int> &postorder, vector<int> &inorder)
 {
-    return generateFromPost(postorder, inorder, 0, (postorder.size() - 1));
+    int currPos = postorder.size() - 1;
+    int start = 0;
+    int end = inorder.size() - 1;
+
+    unordered_map<int, int> hash{};
+    for (int i = 0; i <= end; ++i)
+        hash[inorder[i]] = i;
+
+    return generateFromPost(inorder, postorder, hash, currPos, start, end);
 }
 
 int BinaryTree::Sum(Node *root)
@@ -374,8 +382,8 @@ int main()
     // BT.inOrderR(newRoot);
     // cout << endl;
 
-    // vector<int> postorder{-1};
-    // vector<int> inorder{-1};
+    // vector<int> postorder{9, 15, 7, 20, 3};
+    // vector<int> inorder{9, 3, 15, 20, 7};
     // Node *newRoot = BT.generateFromPost(postorder, inorder);
     // BT.inOrderR(newRoot);
     // cout << endl;
