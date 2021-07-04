@@ -8,7 +8,7 @@ private:
     Node *left, *right;
 
 public:
-    Node(int value) : data(value), left(NULL), right(NULL) {}
+    Node(int dataue) : data(dataue), left(NULL), right(NULL) {}
     friend class BST;
 };
 
@@ -21,19 +21,19 @@ public:
     BST();
     BST(vector<int> &);
 
-    // Inorder Traversal for Sorted values
+    // Inorder Traversal for Sorted dataues
     void inOrder(Node *);
     void inOrder() { inOrder(root); }
 
     // Recursive Insert, Search and Delete
     Node *InsertR(Node *, int);
-    void InsertR(int value) { root = InsertR(root, value); }
+    void InsertR(int dataue) { root = InsertR(root, dataue); }
     Node *SearchR(Node *, int);
-    Node *SearchR(int value) { return SearchR(root, value); }
+    Node *SearchR(int dataue) { return SearchR(root, dataue); }
 
     // Iterative Insert, Search, and Delete
-    void InsertI(int value);
-    Node *SearchI(int value);
+    void InsertI(int dataue);
+    Node *SearchI(int dataue);
 
     // Helper Functions for DeleteR
     int Height(Node *);
@@ -42,7 +42,7 @@ public:
 
     // Recursive Delete Function
     Node *DeleteR(Node *, int);
-    void DeleteR(int value) { DeleteR(root, value); }
+    void DeleteR(int dataue) { DeleteR(root, dataue); }
 
     // Generating BST with just Preorder
     Node *generateFromPre(vector<int> preorder);
@@ -67,25 +67,25 @@ void BST::inOrder(Node *root)
     }
 }
 
-Node *BST::InsertR(Node *root, int value)
+Node *BST::InsertR(Node *root, int dataue)
 {
     if (!root)
-        return new Node(value);
-    if (value < root->data)
-        root->left = InsertR(root->left, value);
-    else if (value > root->data)
-        root->right = InsertR(root->right, value);
+        return new Node(dataue);
+    if (dataue < root->data)
+        root->left = InsertR(root->left, dataue);
+    else if (dataue > root->data)
+        root->right = InsertR(root->right, dataue);
     return root;
 }
 
-Node *BST::SearchR(Node *root, int value)
+Node *BST::SearchR(Node *root, int dataue)
 {
-    if (!root or root->data == value)
+    if (!root or root->data == dataue)
         return root;
-    if (root->data < value)
-        return SearchR(root->left, value);
+    if (root->data < dataue)
+        return SearchR(root->left, dataue);
     else
-        return SearchR(root->right, value);
+        return SearchR(root->right, dataue);
 }
 
 int BST::Height(Node *root)
@@ -115,38 +115,38 @@ Node *BST::inSuc(Node *root)
     return q;
 }
 
-void BST::InsertI(int value)
+void BST::InsertI(int dataue)
 {
     Node *temp = root, *prev;
     if (!root)
     {
-        root = new Node(value);
+        root = new Node(dataue);
         return;
     }
     while (temp)
     {
-        if (temp->data == value)
+        if (temp->data == dataue)
             return;
         prev = temp;
-        if (value < temp->data)
+        if (dataue < temp->data)
             temp = temp->left;
         else
             temp = temp->right;
     }
-    if (value < prev->data)
-        prev->left = new Node(value);
+    if (dataue < prev->data)
+        prev->left = new Node(dataue);
     else
-        prev->right = new Node(value);
+        prev->right = new Node(dataue);
 }
 
-Node *BST::SearchI(int value)
+Node *BST::SearchI(int dataue)
 {
     Node *temp = root;
     while (temp)
     {
-        if (temp->data == value)
+        if (temp->data == dataue)
             return temp;
-        if (value < temp->data)
+        if (dataue < temp->data)
             temp = temp->left;
         else
             temp = temp->right;
@@ -154,7 +154,7 @@ Node *BST::SearchI(int value)
     return NULL;
 }
 
-Node *BST::DeleteR(Node *root, int value)
+Node *BST::DeleteR(Node *root, int dataue)
 {
     Node *q;
     if (!root)
@@ -165,13 +165,13 @@ Node *BST::DeleteR(Node *root, int value)
             this->root = NULL;
         return NULL;
     }
-    if (root->data > value)
-        root->left = DeleteR(root->left, value);
-    else if (root->data < value)
-        root->right = DeleteR(root->right, value);
+    if (root->data > dataue)
+        root->left = DeleteR(root->left, dataue);
+    else if (root->data < dataue)
+        root->right = DeleteR(root->right, dataue);
     else
     {
-        // In this method we are just copying the value to another node, it should be relinked for efficiency
+        // In this method we are just copying the dataue to another node, it should be relinked for efficiency
         if (Height(root->left) > Height(root->right))
         {
             q = inPre(root->left);
@@ -192,40 +192,38 @@ Node *BST::DeleteR(Node *root, int value)
 
 Node *BST::generateFromPre(vector<int> preorder)
 {
-    int i{}, s = preorder.size();
-    stack<Node *> st;
-    root = new Node(preorder[i++]);
-    Node *curr = root;
-    while (i < s)
+    int currPos = 0;
+    int size = preorder.size();
+
+    stack<Node *> nodeSt;
+    Node *root = new Node(preorder[currPos++]);
+    nodeSt.push(root);
+    Node *prev = root;
+
+    while (currPos < size)
     {
-        if (preorder[i] < curr->data)
+        Node *curr = new Node(preorder[currPos++]);
+
+        if (curr->data < prev->data)
         {
-            st.push(curr);
-            Node *temp = new Node(preorder[i++]);
-            curr->left = temp;
-            curr = temp;
+            prev->left = curr;
+            prev = curr;
+            nodeSt.push(curr);
         }
         else
         {
-            Node *prev;
-            if (st.empty())
-                prev = new Node(INT_MAX);
-            else
-                prev = st.top();
-
-            if (preorder[i] < prev->data)
+            while (!nodeSt.empty() and nodeSt.top()->data < curr->data)
             {
-                Node *temp = new Node(preorder[i++]);
-                curr->right = temp;
-                curr = temp;
+                prev = nodeSt.top();
+                nodeSt.pop();
             }
-            else
-            {
-                curr = prev;
-                st.pop();
-            }
+            prev->right = curr;
+            prev = curr;
+            nodeSt.push(curr);
         }
     }
+
+    this->root = root;
     return root;
 }
 
@@ -258,5 +256,7 @@ int main()
     // vector<int> preorder{30, 20, 10, 15, 25, 40, 50, 45};
     // bst.generateFromPre(preorder);
     // bst.inOrder();
+    // cout << endl;
+
     return 0;
 }
