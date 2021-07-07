@@ -7,45 +7,51 @@ using namespace std;
 // Stable: False
 // K-Passes: False
 
-void Partition(vector<int> &arr, int i, int j)
+int partition(vector<int> &arr, int low, int high)
 {
-    if (i < j)
+    int pivot = low;
+    int i = low + 1, j = high;
+
+    while (i <= j)
     {
-        int pivot{i}, end{j};
-        // Move i from pivot, j from inifinity
-        i++;
-        j--;
-        do
-        {
-            while (arr[i] <= arr[pivot])
-                i++;
-            while (arr[j] > arr[pivot])
-                j--;
-            if (i < j)
-                swap(arr[i], arr[j]);
-        } while (i < j);
-        // Swap the pivot to its position
-        swap(arr[pivot], arr[j]);
-        // Here jth element is already in its sorted postion,
-        // acts as the last dummy element for the left side Partition
-        Partition(arr, pivot, j);
-        // since 'end' still holds the last dummy element we can directly pass it
-        Partition(arr, j + 1, end);
+        while (i <= j and arr[i] <= arr[pivot])
+            i++;
+        while (i <= j and arr[j] >= arr[pivot])
+            j--;
+        if (i <= j)
+            swap(arr[i], arr[j]);
+    }
+    swap(arr[pivot], arr[j]);
+
+    return j;
+}
+
+void quickSort(vector<int> &arr, int low, int high)
+{
+    if (low < high)
+    {
+        int pivot = partition(arr, low, high);
+        quickSort(arr, low, pivot - 1);
+        quickSort(arr, pivot + 1, high);
     }
 }
 
-void QuickSort(vector<int> &arr)
+void quickSort(vector<int> &arr)
 {
-    Partition(arr, 0, arr.size() - 1);
+    int low = 0;
+    int high = arr.size() - 1;
+    quickSort(arr, low, high);
 }
 
 int main()
 {
-    // Last element is taken as dummy element
-    vector<int> arr{8, 2, 4, 1, 3, -6, 9, 7, 8, INT_MAX};
-    QuickSort(arr);
+    vector<int> arr{5, 2, 3, 1};
+    // vector<int> arr{5, 1, 1, 2, 0, 0};
+    // vector<int> arr{8, 2, 4, 1, 3, -6, 9, 7, 8};
+    quickSort(arr);
+
     // Printing all the elements except the last dummy element
-    for (int i = 0; i < arr.size() - 1; ++i)
+    for (int i = 0; i < arr.size(); ++i)
         cout << arr[i] << " ";
     cout << endl;
     return 0;
