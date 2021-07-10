@@ -1,5 +1,5 @@
 // Problem Link:
-// https://practice.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1
+// https://practice.geeksforgeeks.org/problems/bipartite-graph/1
 
 // TC: O(n)
 // SC: O(n)
@@ -19,8 +19,8 @@ public:
     Graph(int n);
     void addEdge(int u, int v);
     void displayList();
-    bool isCyclicHelper(int start, vector<bool> &visisted, int prev);
-    bool isCyclic();
+    bool isBipartiteHelper(int start, vector<int> &visisted);
+    bool isBipartite();
 };
 
 Graph::Graph(int n)
@@ -48,33 +48,39 @@ void Graph::displayList()
     cout << "\n";
 }
 
-bool Graph::isCyclicHelper(int start, vector<bool> &visited, int prev)
+bool Graph::isBipartiteHelper(int start, vector<int> &colors)
 {
-    visited[start] = true;
     for (int i : List[start])
     {
-        if (!visited[i])
+        if (colors[i] == -1)
         {
-            if (isCyclicHelper(i, visited, start))
-                return true;
+            colors[i] = !colors[start];
+            if (!isBipartiteHelper(i, colors))
+                return false;
         }
-        else if (i != prev)
-            return true;
+        else if (colors[i] == colors[start])
+            return false;
     }
-    return false;
+
+    return true;
 }
 
-bool Graph::isCyclic()
+bool Graph::isBipartite()
 {
     int n = List.size();
-    vector<bool> visited(n, false);
+    vector<int> colors(n, -1);
 
     for (int i = 1; i < n; ++i)
-        if (!visited[i])
-            if (isCyclicHelper(i, visited, -1))
-                return true;
+    {
+        if (colors[i] == -1)
+        {
+            colors[i] = 0;
+            if (!isBipartiteHelper(i, colors))
+                return false;
+        }
+    }
 
-    return false;
+    return true;
 }
 
 void solve()
@@ -85,24 +91,24 @@ void solve()
     // vector<int> U{2, 2, 2, 3, 4};
     // vector<int> V{1, 3, 5, 4, 5};
 
-    int n = 4;
-    Graph g(n);
-    vector<int> U{2, 3};
-    vector<int> V{3, 4};
-
     // int n = 4;
     // Graph g(n);
-    // vector<int> U{1, 2, 3, 1};
-    // vector<int> V{2, 3, 4, 3};
+    // vector<int> U{2, 3};
+    // vector<int> V{3, 4};
+
+    int n = 4;
+    Graph g(n);
+    vector<int> U{1, 2, 3, 1};
+    vector<int> V{2, 3, 4, 3};
 
     for (int i = 0; i < U.size(); ++i)
         g.addEdge(U[i], V[i]);
 
-    // Displays Adjacency Matrix
+    // Displays Adjacency List
     cout << "List: \n";
     g.displayList();
 
-    g.isCyclic() ? cout << "True\n" : cout << "False\n";
+    g.isBipartite() ? cout << "True\n" : cout << "False\n";
 }
 
 int main()

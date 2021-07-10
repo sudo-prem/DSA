@@ -1,9 +1,3 @@
-// Problem Link:
-// https://practice.geeksforgeeks.org/problems/bipartite-graph/1
-
-// TC: O(n)
-// SC: O(n)
-
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -19,8 +13,7 @@ public:
     Graph(int n);
     void addEdge(int u, int v);
     void displayList();
-    bool isBipartiteHelper(int start, vector<int> &visisted);
-    bool isBipartite();
+    vector<int> shortestDistance(int start);
 };
 
 Graph::Graph(int n)
@@ -48,46 +41,31 @@ void Graph::displayList()
     cout << "\n";
 }
 
-bool Graph::isBipartiteHelper(int start, vector<int> &colors)
+vector<int> Graph::shortestDistance(int start)
 {
+    int n = List.size();
+    vector<int> distance(n, INT_MAX);
     queue<int> nodeQu;
+
+    distance[start] = 0;
     nodeQu.push(start);
-    colors[start] = 0;
 
     while (!nodeQu.empty())
     {
         int curr = nodeQu.front();
-        int color = !colors[curr];
         nodeQu.pop();
 
         for (int i : List[curr])
         {
-            if (colors[i] == -1)
+            if (distance[curr] + 1 < distance[i])
             {
-                colors[i] = color;
+                distance[i] = distance[curr] + 1;
                 nodeQu.push(i);
             }
-            else if (colors[i] == !color)
-                return false;
         }
     }
 
-    return true;
-}
-
-bool Graph::isBipartite()
-{
-    int n = List.size();
-    vector<int> colors(n, -1);
-
-    for (int i = 1; i < n; ++i)
-    {
-        if (colors[i] == -1)
-            if (!isBipartiteHelper(i, colors))
-                return false;
-    }
-
-    return true;
+    return distance;
 }
 
 void solve()
@@ -111,11 +89,14 @@ void solve()
     for (int i = 0; i < U.size(); ++i)
         g.addEdge(U[i], V[i]);
 
-    // Displays Adjacency Matrix
+    // Displays Adjacency List
     cout << "List: \n";
     g.displayList();
 
-    g.isBipartite() ? cout << "True\n" : cout << "False\n";
+    vector<int> distance = g.shortestDistance(1);
+    cout << "Shortest Distance:\n";
+    for (int i = 1; i < n; ++i)
+        cout << i << ": " << distance[i] << endl;
 }
 
 int main()

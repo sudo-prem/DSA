@@ -1,5 +1,5 @@
 // Problem Link:
-// https://practice.geeksforgeeks.org/problems/topological-sort/1#
+// https://practice.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1
 
 // TC: O(n)
 // SC: O(n)
@@ -19,8 +19,8 @@ public:
     Graph(int n);
     void addEdge(int u, int v);
     void displayList();
-    void topoHelper(int start, vector<bool> &visited, stack<int> &nodeSt);
-    vector<int> topoSort();
+    bool isCyclicHelper(int start, vector<bool> &visisted, int prev);
+    bool isCyclic();
 };
 
 Graph::Graph(int n)
@@ -31,6 +31,7 @@ Graph::Graph(int n)
 void Graph::addEdge(int u, int v)
 {
     List[u].push_back(v);
+    List[v].push_back(u);
 }
 
 void Graph::displayList()
@@ -47,59 +48,61 @@ void Graph::displayList()
     cout << "\n";
 }
 
-void Graph::topoHelper(int start, vector<bool> &visited, stack<int> &nodeSt)
+bool Graph::isCyclicHelper(int start, vector<bool> &visited, int prev)
 {
     visited[start] = true;
-
     for (int i : List[start])
     {
         if (!visited[i])
-            topoHelper(i, visited, nodeSt);
+        {
+            if (isCyclicHelper(i, visited, start))
+                return true;
+        }
+        else if (i != prev)
+            return true;
     }
-
-    nodeSt.push(start);
+    return false;
 }
 
-vector<int> Graph::topoSort()
+bool Graph::isCyclic()
 {
     int n = List.size();
     vector<bool> visited(n, false);
-    stack<int> nodeSt;
-    vector<int> res;
 
     for (int i = 1; i < n; ++i)
         if (!visited[i])
-            topoHelper(i, visited, nodeSt);
+            if (isCyclicHelper(i, visited, -1))
+                return true;
 
-    while (!nodeSt.empty())
-    {
-        res.push_back(nodeSt.top());
-        nodeSt.pop();
-    }
-
-    return res;
+    return false;
 }
 
 void solve()
 {
     // 1 Based Indexing
+    // int n = 5;
+    // Graph g(n);
+    // vector<int> U{2, 2, 2, 3, 4};
+    // vector<int> V{1, 3, 5, 4, 5};
+
     int n = 4;
     Graph g(n);
-    vector<int> U{2, 4, 3};
-    vector<int> V{1, 1, 1};
+    vector<int> U{2, 3};
+    vector<int> V{3, 4};
+
+    // int n = 4;
+    // Graph g(n);
+    // vector<int> U{1, 2, 3, 1};
+    // vector<int> V{2, 3, 4, 3};
 
     for (int i = 0; i < U.size(); ++i)
         g.addEdge(U[i], V[i]);
 
-    // Displays Adjacency Matrix
+    // Displays Adjacency List
     cout << "List: \n";
     g.displayList();
 
-    vector<int> res = g.topoSort();
-
-    for (int i : res)
-        cout << i << " ";
-    cout << endl;
+    g.isCyclic() ? cout << "True\n" : cout << "False\n";
 }
 
 int main()

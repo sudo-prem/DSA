@@ -1,5 +1,5 @@
 // Problem Link:
-// https://leetcode.com/problems/clone-graph/submissions/
+// https://leetcode.com/problems/clone-graph/
 
 // Approach 1: (Recursive) DFS
 // TC: O(n)

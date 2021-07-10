@@ -89,7 +89,7 @@ void solve()
     for (int i = 0; i < U.size(); ++i)
         g.addEdge(U[i], V[i]);
 
-    // Displays Adjacency Matrix
+    // Displays Adjacency List
     cout << "List: \n";
     g.displayList();
 
