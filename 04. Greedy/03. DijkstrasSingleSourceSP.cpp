@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 // Approach 1: (Queue)
 // TC: O(n*n)
 // SC: O(n)
@@ -9,10 +6,13 @@ using namespace std;
 // TC: O(n*log(n))
 // SC: O(n)
 
+#include <bits/stdc++.h>
+using namespace std;
+
 class Graph
 {
 private:
-    vector<vector<int>> Matrix;
+    vector<vector<pair<int, int>>> List;
 
 public:
     Graph(int n);
@@ -26,24 +26,14 @@ public:
 
 Graph::Graph(int n)
 {
-    Matrix.resize(n, vector<int>(n, 0));
+    List.resize(n);
 }
 
-// Assuming that the graph is undirected
-// Dijkstra works on both directed and undirected
+// Dijkstra works on both directed and undirected, non-negative cyclic graphs
 void Graph::addEdge(int u, int v, int w)
 {
-    Matrix[u][v] = Matrix[v][u] = w;
-}
-
-void Graph::Display()
-{
-    for (auto i : Matrix)
-    {
-        for (auto j : i)
-            cout << j << " ";
-        cout << endl;
-    }
+    List[u].push_back({v, w});
+    List[v].push_back({u, w});
 }
 
 void Graph::displayDist(vector<int> res, int source)
@@ -52,22 +42,10 @@ void Graph::displayDist(vector<int> res, int source)
         cout << "SP from " << source << " to " << i << " is " << res[i] << endl;
 }
 
-int Graph::minDist(vector<int> vec, vector<bool> visited)
-{
-    int minVal{INT_MAX}, minIndex{};
-    for (int i = 0; i < vec.size(); ++i)
-        if (!visited[i] and vec[i] < minVal)
-        {
-            minVal = vec[i];
-            minIndex = i;
-        }
-    return minIndex;
-}
-
 // Approach 1
 vector<int> Graph::Dijkstra1(int source)
 {
-    int n = Matrix.size();
+    int n = List.size();
     vector<int> distance(n, INT_MAX);
     queue<int> nodeQu;
 
@@ -79,13 +57,14 @@ vector<int> Graph::Dijkstra1(int source)
         int curr = nodeQu.front();
         nodeQu.pop();
 
-        for (int i = 0; i < n; ++i)
-            if (Matrix[curr][i] != 0)
-                if (distance[curr] + Matrix[curr][i] < distance[i])
-                {
-                    distance[i] = distance[curr] + Matrix[curr][i];
-                    nodeQu.push(i);
-                }
+        for (auto i : List[curr])
+        {
+            if (distance[curr] + i.second < distance[i.first])
+            {
+                distance[i.first] = distance[curr] + i.second;
+                nodeQu.push(i.first);
+            }
+        }
     }
 
     return distance;
@@ -94,7 +73,7 @@ vector<int> Graph::Dijkstra1(int source)
 // Approach 2
 vector<int> Graph::Dijkstra2(int source)
 {
-    int n = Matrix.size();
+    int n = List.size();
     vector<int> distance(n, INT_MAX);
     // Min-Heap
     // pair<distance, node>
@@ -108,15 +87,12 @@ vector<int> Graph::Dijkstra2(int source)
         int curr = nodePq.top().second;
         nodePq.pop();
 
-        for (int i = 0; i < n; ++i)
+        for (auto i : List[curr])
         {
-            if (Matrix[curr][i])
+            if (distance[curr] + i.second < distance[i.first])
             {
-                if (distance[curr] + Matrix[curr][i] < distance[i])
-                {
-                    distance[i] = distance[curr] + Matrix[curr][i];
-                    nodePq.push({distance[i], i});
-                }
+                distance[i.first] = distance[curr] + i.second;
+                nodePq.push({distance[i.first], i.first});
             }
         }
     }
