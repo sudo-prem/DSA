@@ -1,6 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// Approach 1: (Queue)
+// TC: O(n*n)
+// SC: O(n)
+
+// Approach 2: (Priority Queue)
+// TC: O(n*log(n))
+// SC: O(n)
+
 class Graph
 {
 private:
@@ -12,7 +20,8 @@ public:
     void Display();
     void displayDist(vector<int> res, int source);
     int minDist(vector<int> vec, vector<bool> visited);
-    vector<int> Dijkstra(int source);
+    vector<int> Dijkstra1(int source);
+    vector<int> Dijkstra2(int source);
 };
 
 Graph::Graph(int n)
@@ -20,7 +29,8 @@ Graph::Graph(int n)
     Matrix.resize(n, vector<int>(n, 0));
 }
 
-// assuming that the graph is undirected
+// Assuming that the graph is undirected
+// Dijkstra works on both directed and undirected
 void Graph::addEdge(int u, int v, int w)
 {
     Matrix[u][v] = Matrix[v][u] = w;
@@ -54,32 +64,64 @@ int Graph::minDist(vector<int> vec, vector<bool> visited)
     return minIndex;
 }
 
-vector<int> Graph::Dijkstra(int source)
+// Approach 1
+vector<int> Graph::Dijkstra1(int source)
 {
     int n = Matrix.size();
-    vector<int> res(n, INT_MAX);
-    vector<bool> visited(n, false);
-    int visitedCount{};
+    vector<int> distance(n, INT_MAX);
+    queue<int> nodeQu;
 
-    res[source] = 0;
+    distance[source] = 0;
+    nodeQu.push(source);
 
-    while (visitedCount != n)
+    while (!nodeQu.empty())
     {
-        int curr = minDist(res, visited);
+        int curr = nodeQu.front();
+        nodeQu.pop();
+
         for (int i = 0; i < n; ++i)
-            // Here we neglect the case of negative edges
-            // Dijkstra may or may not work for negative edges
-            if (Matrix[curr][i] > 0)
-            {
-                int temp = res[curr] + Matrix[curr][i];
-                if (res[i] > temp)
-                    res[i] = temp;
-            }
-        visited[curr] = true;
-        visitedCount++;
+            if (Matrix[curr][i] != 0)
+                if (distance[curr] + Matrix[curr][i] < distance[i])
+                {
+                    distance[i] = distance[curr] + Matrix[curr][i];
+                    nodeQu.push(i);
+                }
     }
 
-    return res;
+    return distance;
+}
+
+// Approach 2
+vector<int> Graph::Dijkstra2(int source)
+{
+    int n = Matrix.size();
+    vector<int> distance(n, INT_MAX);
+    // Min-Heap
+    // pair<distance, node>
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> nodePq;
+
+    nodePq.push({0, source});
+    distance[source] = 0;
+
+    while (!nodePq.empty())
+    {
+        int curr = nodePq.top().second;
+        nodePq.pop();
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (Matrix[curr][i])
+            {
+                if (distance[curr] + Matrix[curr][i] < distance[i])
+                {
+                    distance[i] = distance[curr] + Matrix[curr][i];
+                    nodePq.push({distance[i], i});
+                }
+            }
+        }
+    }
+
+    return distance;
 }
 
 int main()
@@ -95,7 +137,14 @@ int main()
         G.addEdge(U[i], V[i], W[i]);
 
     int source = 0;
-    vector<int> res = G.Dijkstra(source);
+    vector<int> res;
+
+    cout << "Algorithm 1:" << endl;
+    res = G.Dijkstra1(source);
+    G.displayDist(res, source);
+
+    cout << "\nAlgorithm 2:" << endl;
+    res = G.Dijkstra2(source);
     G.displayDist(res, source);
 
     return 0;

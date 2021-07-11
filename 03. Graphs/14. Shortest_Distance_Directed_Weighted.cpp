@@ -1,9 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-#define ll long long
-#define deb(x) cout << #x << ": " << x << "\n"
-
 // Approach 1: (Simple BFS)
 // TC: O(n*n)
 // SC: O(n)
@@ -11,6 +5,12 @@ using namespace std;
 // Approach 2: (Topo Sort + BFS)
 // TC: O(n)
 // SC: O(n)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+#define deb(x) cout << #x << ": " << x << "\n"
 
 class Graph
 {
