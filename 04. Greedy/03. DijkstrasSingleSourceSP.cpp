@@ -19,7 +19,6 @@ public:
     void addEdge(int u, int v, int w);
     void Display();
     void displayDist(vector<int> res, int source);
-    int minDist(vector<int> vec, vector<bool> visited);
     vector<int> Dijkstra1(int source);
     vector<int> Dijkstra2(int source);
 };
