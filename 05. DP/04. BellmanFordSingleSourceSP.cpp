@@ -4,30 +4,23 @@ using namespace std;
 class Graph
 {
 private:
-    vector<vector<int>> Matrix;
+    vector<vector<pair<int, int>>> List;
 
 public:
+    Graph(int n);
     void addEdge(int u, int v, int w);
-    void Display();
     void displayDist(vector<int> res, int source);
-    vector<int> bellmanFord(int source, int vertices, int edges);
+    vector<int> bellmanFord(int source);
 };
 
-// Note: Matrix in this algo is a vector of (vector of (vertex, vertex, weight))
-void Graph::addEdge(int u, int v, int w)
+Graph::Graph(int n)
 {
-    vector<int> temp{u, v, w};
-    Matrix.push_back(temp);
+    List.resize(n);
 }
 
-void Graph::Display()
+void Graph::addEdge(int u, int v, int w)
 {
-    for (auto i : Matrix)
-    {
-        for (auto j : i)
-            cout << j << " ";
-        cout << endl;
-    }
+    List[u].push_back({v, w});
 }
 
 void Graph::displayDist(vector<int> res, int source)
@@ -36,34 +29,50 @@ void Graph::displayDist(vector<int> res, int source)
         cout << "SP from " << source << " to " << i << " is " << res[i] << endl;
 }
 
-vector<int> Graph::bellmanFord(int source, int vertices, int edges)
+vector<int> Graph::bellmanFord(int source)
 {
-    vector<int> res(vertices, INT_MAX);
+    // Vertices
+    int n = List.size();
 
-    res[source] = 0;
+    // Creates a vector of edges with its weight
+    vector<pair<int, pair<int, int>>> edgeList;
+    for (int i = 0; i < n; ++i)
+        for (auto j : List[i])
+            edgeList.push_back({j.second, {i, j.first}});
 
-    for (int i = 0; i < vertices - 1; i++)
-        for (int j = 0; j < edges; j++)
-            if (res[Matrix[j][0]] != INT_MAX && res[Matrix[j][0]] + Matrix[j][2] < res[Matrix[j][1]])
-                res[Matrix[j][1]] = res[Matrix[j][0]] + Matrix[j][2];
+    // Edges
+    int m = edgeList.size();
 
-    return res;
+    vector<int> distance(n, INT_MAX);
+    distance[source] = 0;
+
+    for (int i = 0; i < n - 1; ++i)
+        for (auto edge : edgeList)
+        {
+            int u = edge.second.first;
+            int v = edge.second.second;
+            int w = edge.first;
+            if (distance[u] != INT_MAX and distance[u] + w < distance[v])
+                distance[v] = distance[u] + w;
+        }
+
+    return distance;
 }
 
 int main()
 {
-    int vertices = 7, edges = 10;
+    int n = 7;
     vector<int> U{0, 0, 0, 1, 2, 2, 3, 3, 4, 5};
     vector<int> V{1, 2, 3, 4, 1, 4, 5, 2, 6, 6};
     vector<int> W{6, 5, 5, -1, 2, 1, -1, -2, 3, 3};
 
-    Graph G;
+    Graph G(n);
 
     for (int i = 0; i < U.size(); ++i)
         G.addEdge(U[i], V[i], W[i]);
 
     int source = 0;
-    vector<int> res = G.bellmanFord(source, vertices, edges);
+    vector<int> res = G.bellmanFord(source);
     G.displayDist(res, source);
 
     return 0;

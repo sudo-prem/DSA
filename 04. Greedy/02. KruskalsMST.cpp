@@ -1,139 +1,136 @@
+// Problem Link:
+// https://practice.geeksforgeeks.org/problems/minimum-spanning-tree/1#
+
+// Priority Queue
+// TC: O(n*log(n) + n*(4*alpha)) (4*alpha is the time taken by disjoint set to perform find, union)
+// SC: O(n)
+
 #include <bits/stdc++.h>
 using namespace std;
+
+class disjointSet
+{
+private:
+    vector<int> parent;
+    vector<int> weight;
+
+public:
+    disjointSet(int n)
+    {
+        for (int i = 0; i < n; ++i)
+        {
+            parent.push_back(i);
+            weight.push_back(0);
+        }
+    }
+
+    int collapsingFind(int node)
+    {
+        if (parent[node] == node)
+            return node;
+        parent[node] = collapsingFind(parent[node]);
+        return parent[node];
+    }
+
+    void weightedUnion(int node1, int node2)
+    {
+        int parent1 = collapsingFind(node1);
+        int parent2 = collapsingFind(node2);
+
+        if (weight[parent1] > weight[parent2])
+            parent[parent2] = parent1;
+        else if (weight[parent2] > weight[parent2])
+            parent[parent1] = parent2;
+        else
+        {
+            parent[parent2] = parent1;
+            weight[parent1]++;
+        }
+    }
+};
 
 class Graph
 {
 private:
-    // adjacency list representation
-    vector<pair<pair<int, int>, int>> List;
-    int V;
+    vector<vector<pair<int, int>>> List;
 
 public:
-    Graph(int n) : V(n) {}
+    Graph(int n);
     void addEdge(int u, int v, int w);
-    void displayList();
-    int collapsingFind(int u, vector<int> &Set);
-    void weightedUnion(int u, int v, vector<int> &Set);
-    vector<pair<pair<int, int>, int>> Kruskals();
-    void Cost(vector<pair<pair<int, int>, int>> table);
+    void Display();
+
+    vector<pair<int, int>> kruskals();
+    void displayMST(vector<pair<int, int>> &mstEdges);
 };
+
+Graph::Graph(int n)
+{
+    List.resize(n);
+}
 
 void Graph::addEdge(int u, int v, int w)
 {
-    List.push_back({{u, v}, w});
+    List[u].push_back({v, w});
+    List[v].push_back({u, w});
 }
 
-void Graph::displayList()
+vector<pair<int, int>> Graph::kruskals()
 {
-    for (auto i : List)
-        cout << "(" << i.first.first << ", " << i.first.second << ") = " << i.second << "\n";
-    cout << '\n';
-}
+    int n = List.size();
+    vector<pair<int, int>> mstEdges{};
+    disjointSet ds(n);
 
-// returns the root node(parent node) of the given node
-// while collapsing, it changes all the descendant's value to the root node index
-int Graph::collapsingFind(int u, vector<int> &Set)
-{
-    int x = u, v{};
-    while (Set[x] > 0)
-        x = Set[x];
-    while (u != x)
-    {
-        v = Set[u];
-        Set[u] = x;
-        u = v;
-    }
-    return x;
-}
+    // Pushing negative weights so that max-heap behaves as a minheap
+    priority_queue<pair<int, pair<int, int>>> minHeap;
 
-// connects two subsets into one single subset,
-// makes the larger subset's root as the new root
-void Graph::weightedUnion(int u, int v, vector<int> &Set)
-{
-    if (Set[u] < Set[v])
-    {
-        Set[u] += Set[v];
-        Set[v] = u;
-    }
-    else
-    {
-        Set[v] += Set[u];
-        Set[u] = v;
-    }
-}
+    // Inserting all the edges to the heap
+    for (int i = 0; i < n; ++i)
+        for (auto j : List[i])
+            minHeap.push({-j.second, {i, j.first}});
 
-vector<pair<pair<int, int>, int>> Graph::Kruskals()
-{
-    // n stores the number of vertices in the graph
-    int n = List.size(), k{};
-    vector<pair<pair<int, int>, int>> res;
-    pair<pair<int, int>, int> minIndex;
-    int minValue;
-    // Disjoint set for detecting cycle
-    vector<int> Set(V, -1), visited(n, 0);
-    int i = 0;
-    while (i < V - 2)
+    while (!minHeap.empty())
     {
-        minValue = INT_MAX;
-        // finding the minimum weight
-        for (int j = 0; j < n; ++j)
+        // Getting the current minimum
+        auto curr = minHeap.top();
+        minHeap.pop();
+
+        int node1 = curr.second.first;
+        int node2 = curr.second.second;
+
+        // if both does not have the same parent, we can say that they wont form a cycle
+        // hence can be considered for MST and weighted union should be performed
+        if (ds.collapsingFind(node1) != ds.collapsingFind(node2))
         {
-            if (!visited[j])
-                if (List[j].second < minValue)
-                {
-                    minIndex = List[j];
-                    minValue = List[j].second;
-                    k = j;
-                }
-        }
-        // visit the node
-        visited[k] = 1;
-        // check if they form a cycle
-        int u = minIndex.first.first, v = minIndex.first.second;
-        // condition for forming cycle
-        int Parent1 = collapsingFind(u, Set), Parent2 = collapsingFind(v, Set);
-        if (Parent1 != Parent2)
-        {
-            res.push_back(minIndex);
-            // note that we apply union on the parent nodes only
-            weightedUnion(Parent1, Parent2, Set);
-            i++;
+            mstEdges.push_back({node1, node2});
+            ds.weightedUnion(node1, node2);
         }
     }
-    return res;
+
+    return mstEdges;
 }
 
-void Graph::Cost(vector<pair<pair<int, int>, int>> table)
+void Graph::displayMST(vector<pair<int, int>> &mstEdges)
 {
-    int res{};
-    for (auto i : table)
-    {
-        res += i.second;
-        cout << "(" << i.first.first << ", " << i.first.second << ") = " << i.second << "\n";
-    }
-    cout << "\nTotal Cost: " << res << '\n';
+    for (auto i : mstEdges)
+        for (auto j : List[i.first])
+            if (j.first == i.second)
+                cout << i.first << " to " << i.second << " - " << j.second << endl;
 }
 
 int main()
 {
-    // 1 based indexing
-    int n = 7 + 1;
-    Graph g(n);
+    int n = 5;
+    vector<int> U{0, 0, 1, 1, 1, 2};
+    vector<int> V{1, 3, 2, 4, 3, 4};
+    vector<int> W{2, 6, 3, 5, 8, 7};
 
-    // Adding edges to graph
-    vector<int> U{1, 1, 2, 2, 3, 4, 4, 5, 5};
-    vector<int> V{6, 2, 3, 7, 4, 7, 5, 7, 6};
-    vector<int> W{5, 25, 12, 10, 8, 14, 16, 18, 20};
+    Graph G(n);
+
     for (int i = 0; i < U.size(); ++i)
-        g.addEdge(U[i], V[i], W[i]);
+        G.addEdge(U[i], V[i], W[i]);
 
-    // // Displaying List
-    // cout << "List: \n";
-    // g.displayList();
-
-    // calculating minimum cost spanning tree
-    vector<pair<pair<int, int>, int>> res = g.Kruskals();
-    g.Cost(res);
+    vector<pair<int, int>> mstEdges = G.kruskals();
+    G.displayMST(mstEdges);
 
     return 0;
 }

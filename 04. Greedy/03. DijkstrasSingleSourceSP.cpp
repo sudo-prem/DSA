@@ -1,3 +1,6 @@
+// Problem Link:
+// https://practice.geeksforgeeks.org/problems/implementing-dijkstra-set-1-adjacency-matrix/1
+
 // Approach 1: (Queue)
 // TC: O(n*n)
 // SC: O(n)
@@ -17,7 +20,6 @@ private:
 public:
     Graph(int n);
     void addEdge(int u, int v, int w);
-    void Display();
     void displayDist(vector<int> res, int source);
     vector<int> Dijkstra1(int source);
     vector<int> Dijkstra2(int source);
@@ -28,7 +30,7 @@ Graph::Graph(int n)
     List.resize(n);
 }
 
-// Dijkstra works on both directed and undirected, non-negative cyclic graphs
+// Dijkstra may or may not work for negative edges
 void Graph::addEdge(int u, int v, int w)
 {
     List[u].push_back({v, w});
