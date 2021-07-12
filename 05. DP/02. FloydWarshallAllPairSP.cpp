@@ -1,22 +1,25 @@
+// TC: O(n^3)
+// SC: O(n^2)
+
 #include <bits/stdc++.h>
 using namespace std;
 
 class Graph
 {
 private:
-    vector<vector<long long>> Matrix;
+    vector<vector<int>> Matrix;
 
 public:
     Graph(int n);
     void addEdge(int u, int v, int w);
-    void Display(vector<vector<long long>> mat);
+    void Display(vector<vector<int>> mat);
     void Display() { Display(Matrix); }
-    vector<vector<long long>> allPairSP();
+    vector<vector<int>> allPairSP();
 };
 
 Graph::Graph(int n)
 {
-    Matrix.resize(n, vector<long long>(n, INT_MAX));
+    Matrix.resize(n, vector<int>(n, INT_MAX));
 }
 
 void Graph::addEdge(int u, int v, int w)
@@ -24,7 +27,7 @@ void Graph::addEdge(int u, int v, int w)
     Matrix[u][v] = w;
 }
 
-void Graph::Display(vector<vector<long long>> mat)
+void Graph::Display(vector<vector<int>> mat)
 {
     for (auto i : mat)
     {
@@ -37,14 +40,19 @@ void Graph::Display(vector<vector<long long>> mat)
     }
 }
 
-vector<vector<long long>> Graph::allPairSP()
+vector<vector<int>> Graph::allPairSP()
 {
     int n = Matrix.size();
-    vector<vector<long long>> temp = Matrix;
+    vector<vector<int>> temp = Matrix;
     for (int k = 0; k < n; ++k)
         for (int i = 0; i < n; ++i)
             for (int j = 0; j < n; ++j)
-                temp[i][j] = min(temp[i][j], temp[i][k] + temp[k][j]);
+            {
+                if (temp[i][k] == INT_MAX or temp[k][j] == INT_MAX)
+                    continue;
+                else
+                    temp[i][j] = min(temp[i][j], temp[i][k] + temp[k][j]);
+            }
     return temp;
 }
 
@@ -65,7 +73,7 @@ int main()
     cout << endl;
 
     cout << "APSP Matrix: " << endl;
-    vector<vector<long long>> APSP = G.allPairSP();
+    vector<vector<int>> APSP = G.allPairSP();
     G.Display(APSP);
 
     return 0;
