@@ -9,33 +9,33 @@ using namespace std;
 
 // Approach 1:
 // Recursion
-int helper1(vector<int> &nums1, vector<int> &nums2, int l1, int l2, int maxLen)
+int helper1(string &str1, string &str2, int l1, int l2, int maxLen)
 {
     if (l1 == 0 or l2 == 0)
         return maxLen;
 
     int res{maxLen};
-    if (nums1[l1 - 1] == nums2[l2 - 1])
-        res = max(res, helper1(nums1, nums2, l1 - 1, l2 - 1, maxLen + 1));
+    if (str1[l1 - 1] == str2[l2 - 1])
+        res = max(res, helper1(str1, str2, l1 - 1, l2 - 1, maxLen + 1));
 
     res = max(res,
-              max(helper1(nums1, nums2, l1 - 1, l2, 0),
-                  helper1(nums1, nums2, l1, l2 - 1, 0)));
+              max(helper1(str1, str2, l1 - 1, l2, 0),
+                  helper1(str1, str2, l1, l2 - 1, 0)));
 
     return res;
 }
 
-int findLength1(vector<int> &nums1, vector<int> &nums2)
+int longestCommonSubstring1(string &str1, string &str2)
 {
-    int l1 = nums1.size();
-    int l2 = nums2.size();
+    int l1 = str1.size();
+    int l2 = str2.size();
 
-    return helper1(nums1, nums2, l1, l2, 0);
+    return helper1(str1, str2, l1, l2, 0);
 }
 
 // Approach 2:
 // Recursion + Memoization
-int helper2(vector<int> &nums1, vector<int> &nums2, int l1, int l2, int maxLen, vector<vector<vector<int>>> &dp)
+int helper2(string &str1, string &str2, int l1, int l2, int maxLen, vector<vector<string>> &dp)
 {
     if (l1 == 0 or l2 == 0)
         return maxLen;
@@ -44,31 +44,31 @@ int helper2(vector<int> &nums1, vector<int> &nums2, int l1, int l2, int maxLen, 
         return dp[l1][l2][maxLen];
 
     int res{maxLen};
-    if (nums1[l1 - 1] == nums2[l2 - 1])
-        res = max(res, helper2(nums1, nums2, l1 - 1, l2 - 1, maxLen + 1, dp));
+    if (str1[l1 - 1] == str2[l2 - 1])
+        res = max(res, helper2(str1, str2, l1 - 1, l2 - 1, maxLen + 1, dp));
 
     res = max(res,
-              max(helper2(nums1, nums2, l1 - 1, l2, 0, dp),
-                  helper2(nums1, nums2, l1, l2 - 1, 0, dp)));
+              max(helper2(str1, str2, l1 - 1, l2, 0, dp),
+                  helper2(str1, str2, l1, l2 - 1, 0, dp)));
 
     return dp[l1][l2][maxLen] = res;
 }
 
-int findLength2(vector<int> &nums1, vector<int> &nums2)
+int longestCommonSubstring2(string &str1, string &str2)
 {
-    int l1 = nums1.size();
-    int l2 = nums2.size();
-    vector<vector<vector<int>>> dp(l1 + 1, vector<vector<int>>(l2 + 1, vector<int>(max(l1, l2) + 1, -1)));
+    int l1 = str1.size();
+    int l2 = str2.size();
+    vector<vector<string>> dp(l1 + 1, vector<string>(l2 + 1, string(max(l1, l2) + 1, -1)));
 
-    return helper2(nums1, nums2, l1, l2, 0, dp);
+    return helper2(str1, str2, l1, l2, 0, dp);
 }
 
 // Approach 3:
 // Tabulation + Iteration
-int findLength3(vector<int> &nums1, vector<int> &nums2)
+int longestCommonSubstring3(string &str1, string &str2)
 {
-    int l1 = nums1.size();
-    int l2 = nums2.size();
+    int l1 = str1.size();
+    int l2 = str2.size();
     int maxLen{};
 
     vector<vector<int>> dp(l1 + 1, vector<int>(l2 + 1, 0));
@@ -76,7 +76,7 @@ int findLength3(vector<int> &nums1, vector<int> &nums2)
     {
         for (int j = 1; j <= l2; ++j)
         {
-            if (nums1[i - 1] == nums2[j - 1])
+            if (str1[i - 1] == str2[j - 1])
                 dp[i][j] = dp[i - 1][j - 1] + 1;
             else
                 dp[i][j] = 0;
@@ -89,12 +89,15 @@ int findLength3(vector<int> &nums1, vector<int> &nums2)
 
 void solve()
 {
-    vector<int> nums1{1, 2, 3, 2, 1};
-    vector<int> nums2{3, 2, 1, 4, 7};
+    string str1{"zxabcdezy"};
+    string str2{"yzabcdezx"};
 
-    cout << findLength1(nums1, nums2) << endl;
-    cout << findLength2(nums1, nums2) << endl;
-    cout << findLength3(nums1, nums2) << endl;
+    // string str1{"abcdxyz"};
+    // string str2{"xyzabcd"};
+
+    cout << longestCommonSubstring1(str1, str2) << endl;
+    cout << longestCommonSubstring2(str1, str2) << endl;
+    cout << longestCommonSubstring3(str1, str2) << endl;
 }
 
 int main()

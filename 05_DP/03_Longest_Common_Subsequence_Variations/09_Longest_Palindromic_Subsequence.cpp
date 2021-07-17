@@ -22,7 +22,7 @@ int helper1(string s, int start, int end)
                helper1(s, start + 1, end));
 }
 
-int longestPalindromeSubseq1(string s)
+int longestPalindromicSubsequence1(string s)
 {
     return helper1(s, 0, s.size() - 1);
 }
@@ -45,7 +45,7 @@ int helper2(string s, int start, int end, vector<vector<int>> &dp)
                                 helper2(s, start + 1, end, dp));
 }
 
-int longestPalindromeSubseq2(string s)
+int longestPalindromicSubsequence2(string s)
 {
     int n = s.size();
     vector<vector<int>> dp(n, vector<int>(n, -1));
@@ -54,14 +54,12 @@ int longestPalindromeSubseq2(string s)
 
 // Approach 3:
 // Tabulation + Iteration
-int longestPalindromeSubseq3(string s1)
+int longestPalindromicSubsequence3(string s1)
 {
     // Data Structures and Preprocessing
     int n = s1.size();
     vector<vector<int>> dp(n + 1, vector<int>(n + 1, 0));
-    string s2{};
-    for (int i = n - 1; i >= 0; --i)
-        s2.push_back(s1[i]);
+    string s2(s1.rbegin(), s1.rend());
 
     // Tabulate
     for (int i = 1; i <= n; ++i)
@@ -80,11 +78,11 @@ int longestPalindromeSubseq3(string s1)
 
 void solve()
 {
-    string s{"bbbab"};
+    string s{"bbbabsdfdfdfv"};
 
-    cout << longestPalindromeSubseq1(s) << endl;
-    cout << longestPalindromeSubseq2(s) << endl;
-    cout << longestPalindromeSubseq3(s) << endl;
+    cout << longestPalindromicSubsequence1(s) << endl;
+    cout << longestPalindromicSubsequence2(s) << endl;
+    cout << longestPalindromicSubsequence3(s) << endl;
 }
 
 int main()

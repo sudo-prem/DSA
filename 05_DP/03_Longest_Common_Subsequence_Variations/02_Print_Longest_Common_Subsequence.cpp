@@ -14,17 +14,18 @@ string helper1(string &text1, string &text2, int l1, int l2)
     if (l1 == 0 or l2 == 0)
         return "";
 
+    string res1{}, res2{}, res3{};
     if (text1[l1 - 1] == text2[l2 - 1])
-        return text1[l1 - 1] + helper1(text1, text2, l1 - 1, l2 - 1);
+        res1 = text1[l1 - 1] + helper1(text1, text2, l1 - 1, l2 - 1);
+    res2 = helper1(text1, text2, l1, l2 - 1);
+    res3 = helper1(text1, text2, l1 - 1, l2);
 
-    string res1 = helper1(text1, text2, l1, l2 - 1);
-    string res2 = helper1(text1, text2, l1 - 1, l2);
     if (res1.size() > res2.size())
-        return res1;
-    return res2;
+        return (res1.size() > res3.size()) ? res1 : res3;
+    return (res2.size() > res3.size()) ? res2 : res3;
 }
 
-string printLCS1(string &text1, string &text2)
+string longestCommonSubsequence1(string &text1, string &text2)
 {
     int l1 = text1.size();
     int l2 = text2.size();
@@ -42,17 +43,18 @@ string helper2(string text1, string text2, int l1, int l2, vector<vector<string>
     if (dp[l1][l2] != "")
         return dp[l1][l2];
 
+    string res1{}, res2{}, res3{};
     if (text1[l1 - 1] == text2[l2 - 1])
-        return dp[l1][l2] = text1[l1 - 1] + helper2(text1, text2, l1 - 1, l2 - 1, dp);
+        res1 = text1[l1 - 1] + helper2(text1, text2, l1 - 1, l2 - 1, dp);
+    res2 = helper2(text1, text2, l1, l2 - 1, dp);
+    res3 = helper2(text1, text2, l1 - 1, l2, dp);
 
-    string res1 = dp[l1][l2 - 1] = helper2(text1, text2, l1, l2 - 1, dp);
-    string res2 = dp[l1 - 1][l2] = helper2(text1, text2, l1 - 1, l2, dp);
     if (res1.size() > res2.size())
-        return dp[l1][l2] = res1;
-    return dp[l1][l2] = res2;
+        return dp[l1][l2] = (res1.size() > res3.size()) ? res1 : res3;
+    return dp[l1][l2] = (res2.size() > res3.size()) ? res2 : res3;
 }
 
-string printLCS2(string &text1, string &text2)
+string longestCommonSubsequence2(string &text1, string &text2)
 {
     int l1 = text1.size();
     int l2 = text2.size();
@@ -63,7 +65,7 @@ string printLCS2(string &text1, string &text2)
 
 // Approach 3:
 // Tabulation + Iteration (String concatenation overhead)
-string printLCS3(string &text1, string &text2)
+string longestCommonSubsequence3(string &text1, string &text2)
 {
     int l1 = text1.size();
     int l2 = text2.size();
@@ -73,15 +75,14 @@ string printLCS3(string &text1, string &text2)
     {
         for (int j = 1; j <= l2; ++j)
         {
-            if (text1[i - 1] == text2[j - 1])
-                dp[i][j] = text1[i - 1] + dp[i - 1][j - 1];
+            if (dp[i - 1][j].size() > dp[i][j - 1].size())
+                dp[i][j] = dp[i - 1][j];
             else
-            {
-                if (dp[i - 1][j].size() > dp[i][j - 1].size())
-                    dp[i][j] = dp[i - 1][j];
-                else
-                    dp[i][j] = dp[i][j - 1];
-            }
+                dp[i][j] = dp[i][j - 1];
+
+            if (text1[i - 1] == text2[j - 1])
+                if (dp[i][j].size() < 1 + (dp[i - 1][j - 1]).size())
+                    dp[i][j] = text1[i - 1] + dp[i - 1][j - 1];
         }
     }
 
@@ -90,7 +91,7 @@ string printLCS3(string &text1, string &text2)
 
 // Approach 4:
 // Tabulation + Iteration
-string printLCS4(string text1, string text2)
+string longestCommonSubsequence4(string text1, string text2)
 {
     int l1 = text1.size();
     int l2 = text2.size();
@@ -132,14 +133,14 @@ string printLCS4(string text1, string text2)
 
 void solve()
 {
-    string text1 = "acbcf";
-    string text2 = "abcdaf";
+    string text1 = "acbghcf";
+    string text2 = "abcghdaf";
 
     // The returned strings are not reversed, we may reverse it if need be
-    cout << printLCS1(text1, text2) << endl;
-    cout << printLCS2(text1, text2) << endl;
-    cout << printLCS3(text1, text2) << endl;
-    cout << printLCS4(text1, text2) << endl;
+    cout << longestCommonSubsequence1(text1, text2) << endl;
+    cout << longestCommonSubsequence2(text1, text2) << endl;
+    cout << longestCommonSubsequence3(text1, text2) << endl;
+    cout << longestCommonSubsequence4(text1, text2) << endl;
 }
 
 int main()

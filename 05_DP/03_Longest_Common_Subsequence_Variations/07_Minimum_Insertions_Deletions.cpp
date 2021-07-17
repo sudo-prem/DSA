@@ -15,7 +15,7 @@ int minOperations(string str1, string str2)
     int res{};
     vector<vector<int>> dp(l1 + 1, vector<int>(l2 + 1, 0));
 
-    // Tabulate
+    // Tabulate LCS
     for (int i = 1; i <= l1; ++i)
     {
         for (int j = 1; j <= l2; ++j)

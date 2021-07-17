@@ -1,5 +1,5 @@
 // Problem Link:
-// https://practice.geeksforgeeks.org/problems/minimum-deletitions1648/1#
+// https://www.interviewbit.com/problems/repeating-subsequence/
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -7,33 +7,32 @@ using namespace std;
 #define ll long long
 #define deb(x) cout << #x << ": " << x << "\n"
 
-int minDeletions(string s1)
+int longestRepeatingSubsequence(string &word)
 {
-    // Data Structures and Preprocessing
-    int n = s1.size();
+    // Data Structures
+    int n = word.size();
     vector<vector<int>> dp(n + 1, vector<int>(n + 1, 0));
-    string s2(s1.rbegin(), s1.rend());
 
-    // Tabulate
+    // Tabulation
     for (int i = 1; i <= n; ++i)
     {
         for (int j = 1; j <= n; ++j)
         {
-            if (s1[i - 1] == s2[j - 1])
+            if (i != j and word[i - 1] == word[j - 1])
                 dp[i][j] = 1 + dp[i - 1][j - 1];
             else
                 dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
         }
     }
 
-    return n - dp[n][n];
+    return dp[n][n];
 }
 
 void solve()
 {
-    string s{"aebcbda"};
+    string word{"aabebcdd"};
 
-    cout << minDeletions(s) << endl;
+    cout << longestRepeatingSubsequence(word) << endl;
 }
 
 int main()
