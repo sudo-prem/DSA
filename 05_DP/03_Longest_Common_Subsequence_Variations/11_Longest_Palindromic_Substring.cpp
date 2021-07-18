@@ -9,19 +9,19 @@ using namespace std;
 
 // Approach 1:
 // Recursion
-int helper1(string &word, int left, int right, int maxLen)
+int helper1(string &word, int low, int high, int maxLen)
 {
-    if (left > right)
+    if (low > high)
         return maxLen;
-    if (left == right)
+    if (low == high)
         return maxLen + 1;
 
     int res{maxLen};
-    if (word[left] == word[right])
-        res = max(res, helper1(word, left + 1, right - 1, 2 + maxLen));
+    if (word[low] == word[high])
+        res = max(res, helper1(word, low + 1, high - 1, 2 + maxLen));
     res = max(res,
-              max(helper1(word, left, right - 1, 0),
-                  helper1(word, left + 1, right, 0)));
+              max(helper1(word, low, high - 1, 0),
+                  helper1(word, low + 1, high, 0)));
     return res;
 }
 
@@ -33,24 +33,24 @@ int longestPalindromicSubstring1(string &word)
 }
 
 // Recursion + Memoization
-int helper2(string &word, int left, int right, int maxLen, vector<vector<vector<int>>> &dp)
+int helper2(string &word, int low, int high, int maxLen, vector<vector<vector<int>>> &dp)
 {
-    if (left > right)
+    if (low > high)
         return maxLen;
-    if (left == right)
+    if (low == high)
         return maxLen + 1;
 
-    if (dp[left][right][maxLen] != -1)
-        return dp[left][right][maxLen];
+    if (dp[low][high][maxLen] != -1)
+        return dp[low][high][maxLen];
 
     int res{maxLen};
-    if (word[left] == word[right])
-        res = max(res, helper2(word, left + 1, right - 1, 2 + maxLen, dp));
+    if (word[low] == word[high])
+        res = max(res, helper2(word, low + 1, high - 1, 2 + maxLen, dp));
     res = max(res,
-              max(helper2(word, left, right - 1, 0, dp),
-                  helper2(word, left + 1, right, 0, dp)));
+              max(helper2(word, low, high - 1, 0, dp),
+                  helper2(word, low + 1, high, 0, dp)));
 
-    return dp[left][right][maxLen] = res;
+    return dp[low][high][maxLen] = res;
 }
 
 int longestPalindromicSubstring2(string &word)
