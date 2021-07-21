@@ -57,9 +57,10 @@ int cutRod3(int price[], int n)
     {
         for (int j = 1; j <= n; ++j)
         {
-            dp[i][j] = dp[i - 1][j];
             if (j - i >= 0)
                 dp[i][j] = max(dp[i][j], price[i - 1] + dp[i][j - i]);
+            else
+                dp[i][j] = dp[i - 1][j];
         }
     }
 
