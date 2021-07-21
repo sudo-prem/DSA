@@ -6,9 +6,6 @@ using namespace std;
 
 // Approach 1:
 // Recursion
-// Memoization of this Recursive solution is not feasible
-// for each state there are 4 variable to cache
-// (low high, left, right)
 string helper1(string &word, int low, int high, string left, string right)
 {
     if (low > high)
@@ -33,10 +30,40 @@ string longestPalindromicSubstring1(string word)
 }
 
 // Approach 2:
+// Recursion + Memoization
+string helper2(string &word, int low, int high, string left, string right, unordered_map<string, string> &dp)
+{
+    if (low > high)
+        return left + right;
+    if (low == high)
+        return left + word[low] + right;
+
+    string key = to_string(low) + " " + to_string(high) + " " + left + " " + right;
+    if (dp.find(key) != dp.end())
+        return dp[key];
+
+    string res1{}, res2{}, res3{};
+    if (word[low] == word[high])
+        res1 = helper2(word, low + 1, high - 1, left + word[low], word[high] + right, dp);
+    res2 = helper2(word, low, high - 1, "", "", dp);
+    res3 = helper2(word, low + 1, high, "", "", dp);
+
+    if (res1.size() > res2.size())
+        return dp[key] = (res1.size() > res3.size()) ? res1 : res3;
+    return dp[key] = (res2.size() > res3.size()) ? res2 : res3;
+}
+
+string longestPalindromicSubstring2(string word)
+{
+    unordered_map<string, string> dp;
+    return helper2(word, 0, word.size() - 1, "", "", dp);
+}
+
+// Approach 2:
 // Tabulation + Iteration
 // Find LCSubstring with word and reversed word
 // *** Dry Run, then code ***
-string longestPalindromicSubstring2(string word)
+string longestPalindromicSubstring3(string word)
 {
     // Data Structures
     int n = word.size();
@@ -83,8 +110,10 @@ void solve()
     // string word{"babad"};
     string word{"aacabdkacaa"};
     // string word{"aacabacaa"};
+
     cout << longestPalindromicSubstring1(word) << endl;
     cout << longestPalindromicSubstring2(word) << endl;
+    cout << longestPalindromicSubstring3(word) << endl;
 }
 
 int main()
