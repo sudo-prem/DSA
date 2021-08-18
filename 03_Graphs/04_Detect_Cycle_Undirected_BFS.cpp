@@ -51,8 +51,7 @@ void Graph::displayList()
 bool Graph::isCyclicHelper(int start, vector<bool> &visited)
 {
     queue<pair<int, int>> nodeQu;
-    int prev = -1;
-    nodeQu.push({start, prev});
+    nodeQu.push({start, -1});
 
     while (!nodeQu.empty())
     {

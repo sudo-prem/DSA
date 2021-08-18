@@ -1,5 +1,5 @@
 // Problem Link:
-// https://practice.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1
+// https://practice.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1
 
 // TC: O(n)
 // SC: O(n)

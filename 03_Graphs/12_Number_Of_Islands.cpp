@@ -20,6 +20,8 @@ void islandHelper(vector<vector<char>> &grid, int row, int col)
 {
     int n = grid.size();
     int m = grid[0].size();
+    // Changing it in-place
+    // Hence we do not need visited matrix
     grid[row][col] = '0';
     vector<pair<int, int>> coordinates{{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
 
@@ -101,14 +103,12 @@ void solve()
                                {'1', '1', '0', '0', '0'},
                                {'0', '0', '1', '0', '0'},
                                {'0', '0', '0', '1', '1'}};
-
     cout << numIslands1(grid1) << endl;
 
     vector<vector<char>> grid2{{'1', '1', '0', '0', '0'},
                                {'1', '1', '0', '0', '0'},
                                {'0', '0', '1', '0', '0'},
                                {'0', '0', '0', '1', '1'}};
-
     cout << numIslands2(grid2) << endl;
 }
 

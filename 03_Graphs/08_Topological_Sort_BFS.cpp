@@ -55,11 +55,11 @@ vector<int> Graph::topoSort()
     queue<int> nodeQu;
     vector<int> res;
 
-    for (int i = 1; i < n; ++i)
+    for (int i = 0; i < n; ++i)
         for (int j : List[i])
             inDegree[j]++;
 
-    for (int i = 1; i < n; ++i)
+    for (int i = 0; i < n; ++i)
         if (inDegree[i] == 0)
             nodeQu.push(i);
 

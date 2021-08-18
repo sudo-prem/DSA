@@ -1,6 +1,15 @@
 // Problem Link:
 // https://practice.geeksforgeeks.org/problems/bipartite-graph/1
 
+// Coloring of Graph with 2 colors
+// If graph does not contain a Cycle
+//      True
+// If graph contains Cycle
+//      If Cycle has Even no.of nodes
+//          True
+//      If Cycle has Odd no.of nodes
+//          False
+
 // TC: O(n)
 // SC: O(n)
 
@@ -56,18 +65,18 @@ bool Graph::isBipartiteHelper(int start, vector<int> &colors)
 
     while (!nodeQu.empty())
     {
-        int curr = nodeQu.front();
-        int color = !colors[curr];
+        int currNode = nodeQu.front();
+        int nextColor = !colors[currNode];
         nodeQu.pop();
 
-        for (int i : List[curr])
+        for (int i : List[currNode])
         {
             if (colors[i] == -1)
             {
-                colors[i] = color;
+                colors[i] = nextColor;
                 nodeQu.push(i);
             }
-            else if (colors[i] == !color)
+            else if (colors[i] == !nextColor)
                 return false;
         }
     }
@@ -78,7 +87,12 @@ bool Graph::isBipartiteHelper(int start, vector<int> &colors)
 bool Graph::isBipartite()
 {
     int n = List.size();
+    // We combine the functionality of visited
+    // and colors into one single vector 'colors'
     vector<int> colors(n, -1);
+    // State -1 represents not visited
+    // State 0 represents visited and colored with 1st color
+    // State 1 represents visited and colored with 2nd color
 
     for (int i = 1; i < n; ++i)
     {

@@ -1,6 +1,7 @@
 // Problem Link:
-// https://practice.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1
+// https://practice.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1
 
+// Kahn's Algorithm
 // TC: O(n)
 // SC: O(n)
 
@@ -52,12 +53,13 @@ bool Graph::isCyclic()
     vector<int> inDegree(n, 0);
     vector<bool> visited(n, false);
     queue<int> nodeQu;
+    int count{};
 
-    for (int i = 1; i < n; ++i)
+    for (int i = 0; i < n; ++i)
         for (int j : List[i])
             inDegree[j]++;
 
-    for (int i = 1; i < n; ++i)
+    for (int i = 0; i < n; ++i)
         if (inDegree[i] == 0)
             nodeQu.push(i);
 
@@ -72,11 +74,12 @@ bool Graph::isCyclic()
             if (inDegree[i] == 0)
                 nodeQu.push(i);
         }
+
+        count++;
     }
 
-    for (int i : inDegree)
-        if (i != 0)
-            return true;
+    if (count != n)
+        return true;
     return false;
 }
 

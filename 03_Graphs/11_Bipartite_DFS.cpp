@@ -19,7 +19,7 @@ public:
     Graph(int n);
     void addEdge(int u, int v);
     void displayList();
-    bool isBipartiteHelper(int start, vector<int> &visisted);
+    bool isBipartiteHelper(int start, vector<int> &visisted, int currColor);
     bool isBipartite();
 };
 
@@ -48,17 +48,18 @@ void Graph::displayList()
     cout << "\n";
 }
 
-bool Graph::isBipartiteHelper(int start, vector<int> &colors)
+bool Graph::isBipartiteHelper(int start, vector<int> &colors, int currColor)
 {
+    colors[start] = currColor;
+
     for (int i : List[start])
     {
         if (colors[i] == -1)
         {
-            colors[i] = !colors[start];
-            if (!isBipartiteHelper(i, colors))
+            if (!isBipartiteHelper(i, colors, !currColor))
                 return false;
         }
-        else if (colors[i] == colors[start])
+        else if (colors[i] == currColor)
             return false;
     }
 
@@ -73,11 +74,8 @@ bool Graph::isBipartite()
     for (int i = 1; i < n; ++i)
     {
         if (colors[i] == -1)
-        {
-            colors[i] = 0;
-            if (!isBipartiteHelper(i, colors))
+            if (!isBipartiteHelper(i, colors, 0))
                 return false;
-        }
     }
 
     return true;
@@ -96,6 +94,7 @@ void solve()
     // vector<int> U{2, 3};
     // vector<int> V{3, 4};
 
+    // Output: False
     int n = 4;
     Graph g(n);
     vector<int> U{1, 2, 3, 1};

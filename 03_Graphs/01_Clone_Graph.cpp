@@ -40,14 +40,18 @@ public:
 // Approach 1
 Node *cloneHelper(Node *node, unordered_map<Node *, Node *> &hash)
 {
-    if (hash.find(node) == hash.end())
+    Node *deepCopy = new Node(node->val);
+    hash[node] = deepCopy;
+
+    for (auto itr : node->neighbors)
     {
-        hash[node] = new Node(node->val);
-        for (Node *i : node->neighbors)
-            hash[node]->neighbors.push_back(cloneHelper(i, hash));
+        if (hash.find(itr) != hash.end())
+            deepCopy->neighbors.push_back(hash[itr]);
+        else
+            deepCopy->neighbors.push_back(cloneHelper(itr, hash));
     }
 
-    return hash[node];
+    return deepCopy;
 }
 
 Node *cloneGraph1(Node *node)

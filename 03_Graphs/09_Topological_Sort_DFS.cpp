@@ -1,6 +1,7 @@
 // Problem Link:
 // https://practice.geeksforgeeks.org/problems/topological-sort/1#
 
+// Use External Stack
 // TC: O(n)
 // SC: O(n)
 
