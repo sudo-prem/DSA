@@ -26,7 +26,7 @@ string shortestCommonSupersequence(string str1, string str2)
         }
     }
 
-    // Retreive SCS from table
+    // Retreive SCS from LCS table
     int i = l1, j = l2;
     string lcs{};
     while (i > 0 and j > 0)

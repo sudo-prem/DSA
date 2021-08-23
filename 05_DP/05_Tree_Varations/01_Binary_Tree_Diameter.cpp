@@ -26,9 +26,10 @@ int helper1(TreeNode *root, int &res)
 
     int leftMax = helper1(root->left, res);
     int rightMax = helper1(root->right, res);
-    int currMax = 1 + max(leftMax, rightMax);
 
+    int currMax = 1 + max(leftMax, rightMax);
     res = max(res, leftMax + rightMax);
+
     return currMax;
 }
 

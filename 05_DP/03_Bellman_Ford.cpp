@@ -1,3 +1,6 @@
+// Single source shortest path algorithm
+// Bellman Ford's algorithm handles -ve weights while Dijkstra's cannot
+
 #include <bits/stdc++.h>
 using namespace std;
 
