@@ -5,7 +5,7 @@
 // TC: O(n^2)
 // SC: O(n)
 
-// Approach 2: (Priority Queue as minHeap)
+// Approach 2: (Priority Queue as MinHeap)
 // TC: O(n*log(n))
 // SC: O(n)
 
