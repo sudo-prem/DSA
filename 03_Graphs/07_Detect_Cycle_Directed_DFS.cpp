@@ -64,7 +64,6 @@ bool Graph::hasCycleHelper(int start, vector<bool> &visited, vector<bool> &currD
     }
 
     currDfs[start] = false;
-
     return false;
 }
 
@@ -76,8 +75,9 @@ bool Graph::hasCycle()
 
     for (int i = 1; i < n; ++i)
     {
-        if (hasCycleHelper(i, visited, currDfs))
-            return true;
+        if (!visited[i])
+            if (hasCycleHelper(i, visited, currDfs))
+                return true;
     }
 
     return false;
