@@ -276,48 +276,54 @@ Node *BinaryTree::generateFromPost(vector<int> &postorder, vector<int> &inorder)
 
 int BinaryTree::Sum(Node *root)
 {
-    if (root)
-    {
-        int x = Sum(root->left);
-        int y = Sum(root->right);
-        return x + y + root->data;
-    }
-    return 0;
+    if (!root)
+        return 0;
+
+    if (!root->left and !root->right)
+        return root->data;
+
+    int x = Sum(root->left);
+    int y = Sum(root->right);
+    return x + y + root->data;
 }
 
 int BinaryTree::Count(Node *root)
 {
-    if (root)
-    {
-        int x = Count(root->left);
-        int y = Count(root->right);
-        return x + y + 1;
-    }
-    return 0;
+    if (!root)
+        return 0;
+
+    if (!root->left and !root->right)
+        return 1;
+
+    int x = Count(root->left);
+    int y = Count(root->right);
+    return x + y + 1;
 }
 
 int BinaryTree::Height(Node *root)
 {
-    if (root)
-    {
-        int x = Height(root->left);
-        int y = Height(root->right);
-        return (x > y ? x + 1 : y + 1);
-    }
-    return 0;
+    if (!root)
+        return 0;
+
+    if (!root->left and !root->right)
+        return 1;
+
+    int x = Height(root->left);
+    int y = Height(root->right);
+    return max(x, y) + 1;
 }
 
 int BinaryTree::Leaf(Node *root)
 {
-    if (root)
-    {
-        int x = Leaf(root->left);
-        int y = Leaf(root->right);
-        if (!root->left and !root->right)
-            return x + y + 1;
-        return x + y;
-    }
-    return 0;
+    if (!root)
+        return 0;
+
+    if (!root->left and !root->right)
+        return 1;
+
+    int x = Leaf(root->left);
+    int y = Leaf(root->right);
+    return x + y;
 }
 
 int BinaryTree::NonLeaf(Node *root)
@@ -339,7 +345,7 @@ int BinaryTree::Degree1Nodes(Node *root)
     {
         int x = Degree1Nodes(root->left);
         int y = Degree1Nodes(root->right);
-        // Exclusive OR
+        // Exclusive OR (XOR)
         // (p and q') or (p' and q)
         if (!root->left ^ !root->right)
             return x + y + 1;

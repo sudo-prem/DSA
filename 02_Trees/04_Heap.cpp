@@ -60,7 +60,7 @@ void Delete(Heap *heap)
 }
 
 // Regular Insertion happens from top to bottom,
-// Regular deletion happens from botton to top,
+// Regular deletion happens from bottom to top,
 // Heapify happens from bottom to top, takes only O(n) time
 void Heapify(Heap *heap)
 {
