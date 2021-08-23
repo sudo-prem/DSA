@@ -1,11 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// == Analysis =========================================
 // Time Complexity: O(n.log(n))
 // Space Complexity: O(1)
 // Adaptability: True
-// Stable: False
+// Stability: False
 // K-Passes: False
+// Algorithm:
+//  Take a variable gap initialised to ceil(n/2) and
+//  comapare elements at gap distance apart and swap.
+//  Reduce gap by half and continue comaparing with
+//  the new gap, and so on until gap becomes 0
 
 void shellSort(vector<int> &nums)
 {

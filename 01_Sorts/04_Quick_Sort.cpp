@@ -1,11 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// == Analysis ================================
 // Time Complexity: O(n*log(n))
-// Space Complexity: O(1) Not including implicit recusrion stack
+// Space Complexity: O(log(n)) Recusrion Stack
 // Adaptability: False
-// Stable: False
+// Stability: False
 // K-Passes: False
+// Algorithm:
+//  Take a number(pivot) find its
+//  corresponding position in the list
 
 int partition(vector<int> &arr, int low, int high)
 {

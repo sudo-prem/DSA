@@ -1,11 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// == Analysis ===============================
 // Time Complexity: O(n^2)
 // Space Complxexity: O(1)
 // Adaptability: True
-// Stable: False
+// Stability: False
 // K-Passes: True
+// Algorithm:
+//  Find the largest/smallest element in each
+//  iteration and swap it with the last index
 
 void SelectionSort(vector<int> &arr)
 {

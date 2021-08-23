@@ -1,11 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// == Analysis ================================
 // Time Complexity: O(n^2)
 // Space Complexity: O(1)
 // Adaptability: True
-// Stable: True
+// Stability: True
 // K-Passes: False
+// Algorithm:
+//  Assume that the first element is sorted
+//  add elements from 2nd index to the sorted
+//  array by finding its appropriate position
 
 void InsertionSort(vector<int> &arr)
 {

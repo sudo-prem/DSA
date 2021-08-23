@@ -1,11 +1,20 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// == Analysis =================================================
 // Time Complexity: O(n)
 // Space Complexity: O(1)
 // Adaptability: True
-// Stable: True
+// Stability: True
 // K-Passes: False
+// Algorithm:
+//  Similar to bin sort but the size of the auxiliary vector is
+//  constant, (10 for deciaml, 2 for binary) find the maximum
+//  number from given array, and store it's number of digits it
+//  contains, drop the numbers based on the last digit, regenerate
+//  a new list from it, take the new list and drop the numbers
+//  based on the second last digit and so on till the 0th index
+//  of the maximum value's number of digits
 
 class Node
 {

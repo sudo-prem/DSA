@@ -1,15 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// == Analysis =====================================
 // Time Complexity: O(n)
 // Space Complexity: O(n)
 // Adaptability: True
-// Stable: True
+// Stability: True
 // K-Passes: False
+// Algorithm:
+//  Same as CountSort but has linked representation
+//  CountSort saves frequency of appearance
+//  Bin/Bucket sort stores the value as a node
 
-// Same as CountSort but this has linked representation
-// CountSort saves frequency of appearance
-// Bin/Bucket sort stores the value as a node
 class Node
 {
 public:

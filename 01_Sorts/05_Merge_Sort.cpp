@@ -1,11 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// == Analysis ===================================
 // Time Complexity: O(n*log(n))
 // Space Complexity: O(n)
 // Adaptability: False
-// Stable: True
+// Stability: True
 // K-Passes: False
+// Algorithm:
+//  Perform merge on 2 elements at a time
+//  perform merge on 4 elements at a time
+//  and so on till the entire list is sorted
 
 // Merges the array arr from l to mid with arr from mid+1 to h-1
 // Consumes O(n) extra space
@@ -36,12 +41,9 @@ void MergeSort(vector<int> &arr)
     int i{}, j{};
     int l{}, mid{}, h{};
     // Outer For loop is to denote how many elements to take at a time
-    // First merge: 2 elements at a time
-    // Second merge: 4 elements at a time
-    // and so on..
     for (i = 2; i <= end; i *= 2)
     {
-        // Inner for loop is to find the start and end of each
+        // Inner for loop is to find the start and end of each iteration
         for (j = 0; j + i - 1 < end; j += i)
         {
             l = j;

@@ -1,11 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// == Analysis =======================================
 // Time Complexity: O(n)
-// Space Complexity: O(n)
+// Space Complexity: O(max_element(n))
 // Adaptability: True
-// Stable: True
+// Stability: True
 // K-Passes: False
+// Algorithm:
+//  Create a vector of size(max(given array)) and
+//  initialize it to 0, traverse through the array and
+//  increment the corresponding value in the vector
 
 int FindMax(vector<int> &arr)
 {

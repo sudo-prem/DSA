@@ -1,11 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// == Analysis =============================
 // Time Complexity: O(n^2)
 // Space Complexity: O(1)
 // Adaptability: True
-// Stable: True
+// Stability: True
 // K-Passes: True
+// Algorithm:
+//  For each iteration swap the adjacent
+//  elements such that the largest/smallest
+//  element moves to the end/start
 
 void BubbleSort(vector<int> &arr)
 {
