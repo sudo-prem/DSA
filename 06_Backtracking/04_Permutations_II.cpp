@@ -21,6 +21,7 @@ void helper(vector<int> &nums, vector<bool> &used, vector<int> &curr, vector<vec
     {
         if (used[i])
             continue;
+
         used[i] = true;
         curr.push_back(nums[i]);
         helper(nums, used, curr, res);

@@ -9,7 +9,7 @@ using namespace std;
 // K-Passes: True
 // Algorithm:
 //  Find the largest/smallest element in each
-//  iteration and swap it with the last index
+//  iteration and swap it with last/first index
 
 void SelectionSort(vector<int> &arr)
 {

@@ -56,6 +56,7 @@ vector<int> Graph::prims1()
         // Find a node that has the minimum edge weight and has not been visited
         int minNode, minValue{INT_MAX};
         for (int j = 0; j < n; ++j)
+            // Relaxation
             if (visited[j] == false and key[j] < minValue)
             {
                 minValue = key[j];
