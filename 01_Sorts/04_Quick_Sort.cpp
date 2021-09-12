@@ -30,13 +30,13 @@ int partition(vector<int> &arr, int low, int high)
     return j;
 }
 
-void quickSort(vector<int> &arr, int low, int high)
+void quickSortHelper(vector<int> &arr, int low, int high)
 {
     if (low <= high)
     {
         int pivot = partition(arr, low, high);
-        quickSort(arr, low, pivot - 1);
-        quickSort(arr, pivot + 1, high);
+        quickSortHelper(arr, low, pivot - 1);
+        quickSortHelper(arr, pivot + 1, high);
     }
 }
 
@@ -44,7 +44,7 @@ void quickSort(vector<int> &arr)
 {
     int low = 0;
     int high = arr.size() - 1;
-    quickSort(arr, low, high);
+    quickSortHelper(arr, low, high);
 }
 
 int main()
