@@ -51,7 +51,6 @@ bool Graph::isCyclic()
 {
     int n = List.size();
     vector<int> inDegree(n, 0);
-    vector<bool> visited(n, false);
     queue<int> nodeQu;
     int count{};
 
