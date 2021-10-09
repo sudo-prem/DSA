@@ -16,31 +16,32 @@ using namespace std;
 void shellSort(vector<int> &nums)
 {
     int n = nums.size();
-    int gap = ceil(n / 2);
 
-    while (gap > 0)
+    for (int gap = ceil(n / 2.0); gap >= 1; gap = ceil(gap / 2.0))
     {
-        int i = gap;
-        while (i < n)
+        for (int i = gap; i < n; ++i)
         {
-            int j = i;
-            while (j >= gap and nums[j] < nums[j - gap])
+            for (int j = i; j - gap >= 0; j -= gap)
             {
-                swap(nums[j], nums[j - gap]);
-                j -= gap;
+                if (nums[j] < nums[j - gap])
+                    swap(nums[j], nums[j - gap]);
+                else
+                    break;
             }
-            i++;
         }
-        gap /= 2;
+        if (gap == 1)
+            break;
     }
 }
 
 int main()
 {
     vector<int> nums{2, 331, 97, 4, 9, 22, 6, 5, 10};
+
     shellSort(nums);
-    for (auto i : nums)
+    for (int i : nums)
         cout << i << " ";
     cout << endl;
+
     return 0;
 }
