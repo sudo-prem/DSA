@@ -1,5 +1,5 @@
 // Problem Link:
-// https://practice.geeksforgeeks.org/problems/topological-sort/1#
+// https://practice.geeksforgeeks.org/problems/topological-sort/1
 
 // Kahn's Algorithm
 // TC: O(n)
