@@ -48,23 +48,23 @@ int perfectSum2(vector<int> &nums, int target)
 
 // Approach 3: (Bottom Up)
 // Tabulation + Iteration
+int mod = 1e9 + 7;
 int perfectSum3(vector<int> &nums, int target)
 {
     int n = nums.size();
-
     vector<vector<int>> dp(n + 1, vector<int>(target + 1, 0));
-    // Initialization
+
     for (int i = 0; i <= n; ++i)
         dp[i][0] = 1;
 
     for (int i = 1; i <= n; ++i)
     {
-        int curr = nums[i - 1];
         for (int j = 1; j <= target; ++j)
         {
-            dp[i][j] = dp[i - 1][j];
-            if (j - curr >= 0 and dp[i - 1][j - curr])
-                dp[i][j] += dp[i - 1][j - curr];
+            if (j - nums[i - 1] >= 0)
+                dp[i][j] = (dp[i - 1][j] + dp[i - 1][j - nums[i - 1]]) % mod;
+            else
+                dp[i][j] = dp[i - 1][j];
         }
     }
 

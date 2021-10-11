@@ -80,9 +80,10 @@ int minDifference4(vector<int> &nums)
         int curr = nums[i - 1];
         for (int j = 1; j <= sum; ++j)
         {
-            dp[i][j] = dp[i - 1][j];
             if (j - curr >= 0 and dp[i - 1][j - curr])
                 dp[i][j] = true;
+            else
+                dp[i][j] = dp[i - 1][j];
 
             if (dp[i][j])
                 minDiff = min(minDiff, abs((sum - j) - j));
