@@ -1,82 +1,68 @@
-// All pair shortest path algorithm
+// Problem Link:
+// https://practice.geeksforgeeks.org/problems/implementing-floyd-warshall2042/1
 
 // TC: O(n^3)
-// SC: O(n^2)
+// SC: O(1)
 
 #include <bits/stdc++.h>
 using namespace std;
 
-class Graph
-{
-private:
-    vector<vector<int>> Matrix;
+#define ll long long
+#define deb(x) cout << #x << ": " << x << "\n"
 
-public:
-    Graph(int n);
-    void addEdge(int u, int v, int w);
-    void Display(vector<vector<int>> mat);
-    void Display() { Display(Matrix); }
-    vector<vector<int>> allPairSP();
-};
-
-Graph::Graph(int n)
+void floydWarshall(vector<vector<int>> &matrix)
 {
-    Matrix.resize(n, vector<int>(n, INT_MAX));
-}
+    int n = matrix.size();
 
-void Graph::addEdge(int u, int v, int w)
-{
-    Matrix[u][v] = w;
-}
-
-void Graph::Display(vector<vector<int>> mat)
-{
-    for (auto i : mat)
+    for (int k = 0; k < n; ++k)
     {
-        for (auto j : i)
-            if (j == INT_MAX)
-                cout << "~ ";
-            else
-                cout << j << " ";
-        cout << endl;
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < n; ++j)
+            {
+                if (matrix[i][k] == -1 or matrix[k][j] == -1)
+                    continue;
+                else if (matrix[i][j] == -1)
+                    matrix[i][j] = matrix[i][k] + matrix[k][j];
+                else
+                    matrix[i][j] = min(matrix[i][j], matrix[i][k] + matrix[k][j]);
+            }
+        }
     }
 }
 
-vector<vector<int>> Graph::allPairSP()
+void display(vector<vector<int>> &matrix)
 {
-    int n = Matrix.size();
-    vector<vector<int>> temp = Matrix;
-    for (int k = 0; k < n; ++k)
-        for (int i = 0; i < n; ++i)
-            for (int j = 0; j < n; ++j)
-            {
-                if (temp[i][k] == INT_MAX or temp[k][j] == INT_MAX)
-                    continue;
-                else
-                    temp[i][j] = min(temp[i][j], temp[i][k] + temp[k][j]);
-            }
-    return temp;
+    int n = matrix.size();
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < n; ++j)
+            cout << matrix[i][j] << " ";
+        cout << endl;
+    }
+    cout << endl;
+}
+
+void solve()
+{
+    vector<vector<int>> matrix{{0, 1, 43}, {1, 0, 6}, {-1, -1, 0}};
+
+    display(matrix);
+    floydWarshall(matrix);
+    display(matrix);
 }
 
 int main()
 {
-    int n = 3 + 1;
-    Graph G(n);
-
-    vector<int> U{0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3};
-    vector<int> V{0, 1, 3, 0, 1, 2, 0, 2, 3, 0, 3};
-    vector<int> W{0, 3, 7, 8, 0, 2, 5, 0, 1, 2, 0};
-
-    for (int i = 0; i < U.size(); ++i)
-        G.addEdge(U[i], V[i], W[i]);
-
-    cout << "Original Matrix: " << endl;
-    G.Display();
-    cout << endl;
-
-    cout << "APSP Matrix: " << endl;
-    vector<vector<int>> APSP = G.allPairSP();
-    G.Display(APSP);
-
+    ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    // freopen("input.txt", "r", stdin);
+    // freopen("output.txt", "w", stdout);
+    int t{1}, i{1};
+    // cin >> t;
+    while (t--)
+    {
+        // cout << "Case #" << i++ << ": ";
+        solve();
+    }
     return 0;
 }
