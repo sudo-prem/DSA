@@ -76,6 +76,27 @@ int longestPalindromicSubsequence3(string s1)
     return dp[n][n];
 }
 
+// Approach 4:
+// Tabulation + Iteration (SC: O(n))
+int longestPalindromicSubsequence4(string &s)
+{
+    int n = s.size();
+    vector<vector<int>> dp(2, vector<int>(n + 1, 0));
+
+    for (int i = 1; i <= n; ++i)
+    {
+        for (int j = 1; j <= n; ++j)
+        {
+            if (s[i - 1] == s[n - j])
+                dp[i % 2][j] = dp[(i + 1) % 2][j - 1] + 1;
+            else
+                dp[i % 2][j] = max(dp[(i + 1) % 2][j], dp[i % 2][j - 1]);
+        }
+    }
+
+    return dp[n % 2][n];
+}
+
 void solve()
 {
     string s{"bbbabsdfdfdfv"};
@@ -83,6 +104,7 @@ void solve()
     cout << longestPalindromicSubsequence1(s) << endl;
     cout << longestPalindromicSubsequence2(s) << endl;
     cout << longestPalindromicSubsequence3(s) << endl;
+    cout << longestPalindromicSubsequence4(s) << endl;
 }
 
 int main()

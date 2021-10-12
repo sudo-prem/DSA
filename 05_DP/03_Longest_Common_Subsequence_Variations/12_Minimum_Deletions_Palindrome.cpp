@@ -1,5 +1,5 @@
 // Problem Link:
-// https://practice.geeksforgeeks.org/problems/minimum-deletitions1648/1#
+// https://practice.geeksforgeeks.org/problems/minimum-deletitions1648/1
 
 #include <bits/stdc++.h>
 using namespace std;

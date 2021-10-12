@@ -1,5 +1,5 @@
 // Problem Link:
-// https://practice.geeksforgeeks.org/problems/shortest-common-supersequence0322/1#
+// https://practice.geeksforgeeks.org/problems/shortest-common-supersequence0322/1
 
 #include <bits/stdc++.h>
 using namespace std;
