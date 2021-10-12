@@ -1,5 +1,5 @@
 // Problem Link:
-// https://www.geeksforgeeks.org/matrix-chain-multiplication-dp-8/
+// https://practice.geeksforgeeks.org/problems/matrix-chain-multiplication0303/1
 
 #include <bits/stdc++.h>
 using namespace std;
