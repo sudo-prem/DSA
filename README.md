@@ -1,3 +1,3 @@
 # DSA
 
-C++ implementations of famous data structures and algorithms.
+C++ implementations of data structures and algorithms.
