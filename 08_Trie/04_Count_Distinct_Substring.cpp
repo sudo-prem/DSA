@@ -7,12 +7,10 @@ class Node
 {
 public:
 	vector<Node*> charList;
-	bool isEnd;
 
 	Node()
 	{
 		charList.resize(26);
-		isEnd = false;
 	}
 };
 
@@ -43,8 +41,6 @@ public:
 			}
 			node = node->charList[c - 'a'];
 		}
-
-		node->isEnd = true;
 	}
 };
 
