@@ -64,7 +64,8 @@ bool Graph::isCyclic()
 
     while (!nodeQu.empty())
     {
-        int curr = nodeQu.front();
+		count++;
+		int curr = nodeQu.front();
         nodeQu.pop();
 
         for (int i : List[curr])
@@ -73,8 +74,6 @@ bool Graph::isCyclic()
             if (inDegree[i] == 0)
                 nodeQu.push(i);
         }
-
-        count++;
     }
 
     if (count != n)

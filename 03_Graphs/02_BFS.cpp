@@ -58,11 +58,13 @@ void Graph::BFSHelper(int start, vector<bool> &visited, vector<int> &bfs)
         bfs.push_back(curr);
 
         for (auto i : List[curr])
-            if (!visited[i])
-            {
-                nodeQu.push(i);
-                visited[i] = true;
-            }
+		{
+			if (!visited[i])
+			{
+				nodeQu.push(i);
+				visited[i] = true;
+			}
+		}
     }
 }
 

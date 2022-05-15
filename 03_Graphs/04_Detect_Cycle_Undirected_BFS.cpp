@@ -57,8 +57,8 @@ bool Graph::isCyclicHelper(int start, vector<bool> &visited)
     {
         int curr = nodeQu.front().first;
         int prev = nodeQu.front().second;
+		nodeQu.pop();
 
-        nodeQu.pop();
         visited[curr] = true;
 
         for (int i : List[curr])
