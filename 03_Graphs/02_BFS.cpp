@@ -6,109 +6,70 @@
 
 #include <bits/stdc++.h>
 using namespace std;
+#define ll long long
+#define deb(x) cout << #x << ": " << x << "\n"
 
-class Graph
+void bfs(vector<int> adj[], vector<bool> &visited, vector<int> &res)
 {
-private:
-    vector<vector<int>> List;
+	queue<int> nodeQu;
+	nodeQu.push(0);
+	visited[0] = true;
 
-public:
-    Graph(int n);
-    void addEdge(int u, int v);
-    void displayList();
-    vector<int> BFS();
-    void BFSHelper(int start, vector<bool> &visited, vector<int> &bfs);
-};
-
-Graph::Graph(int n)
-{
-    List.resize(n + 1);
-}
-
-void Graph::addEdge(int u, int v)
-{
-    List[u].push_back(v);
-    List[v].push_back(u);
-}
-
-void Graph::displayList()
-{
-    int size = List.size();
-    int count{};
-    for (auto i : List)
-    {
-        cout << count++ << ": ";
-        for (auto j : i)
-            cout << j << " ";
-        cout << "\n";
-    }
-    cout << "\n";
-}
-
-void Graph::BFSHelper(int start, vector<bool> &visited, vector<int> &bfs)
-{
-    queue<int> nodeQu;
-    nodeQu.push(start);
-    visited[start] = true;
-
-    while (!nodeQu.empty())
-    {
-        int curr = nodeQu.front();
-        nodeQu.pop();
-        bfs.push_back(curr);
-
-        for (auto i : List[curr])
+	while (nodeQu.empty() == false)
+	{
+		int size = nodeQu.size();
+		while (size--)
 		{
-			if (!visited[i])
+			int curr = nodeQu.front();
+			res.push_back(curr);
+			nodeQu.pop();
+
+			for (int node : adj[curr])
 			{
-				nodeQu.push(i);
-				visited[i] = true;
+				if (!visited[node])
+				{
+					nodeQu.push(node);
+					visited[node] = true;
+				}
 			}
 		}
-    }
+	}
 }
 
-vector<int> Graph::BFS()
+vector<int> bfsOfGraph(int n, vector<int> adj[])
 {
-    int size = List.size();
-    vector<bool> visited(size, false);
-    vector<int> bfs{};
+	vector<int> res{};
+	vector<bool> visited(n, false);
 
-    for (int i = 1; i < size; ++i)
-        if (!visited[i])
-            BFSHelper(i, visited, bfs);
+	bfs(adj, visited, res);
 
-    return bfs;
+	return res;
 }
 
 void solve()
 {
-    // 1 Based Indexing
-    int n = 7;
-    Graph g(n);
-    vector<int> U{1, 2, 2, 3, 5, 4};
-    vector<int> V{2, 3, 7, 5, 7, 6};
-    for (int i = 0; i < U.size(); ++i)
-        g.addEdge(U[i], V[i]);
-
-    // Displays Adjacency List
-    cout << "List: \n";
-    g.displayList();
-
-    // Breadth First Search
-    cout << "BFS: \n";
-    vector<int> res = g.BFS();
-    for (auto i : res)
-        cout << i << " ";
-    cout << "\n";
+	vector<int> adj[5];
+	adj[0] = {1, 2, 3};
+	adj[2] = {4};
+	
+	auto res = bfsOfGraph(5, adj);
+	for(int num: res)
+		cout << num << " ";
+	cout << endl;
 }
 
 int main()
 {
-    ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
-    int t{1};
-    // cin >> t;
-    while (t--)
-        solve();
-    return 0;
+	ios_base::sync_with_stdio(0), cin.tie(0);
+#ifdef ONPC
+	freopen("input.txt", "r", stdin);
+#endif
+	int t {1};
+	/* int i {1}; cin >> t; */
+	while (t--)
+	{
+		/* cout << "Case #" << i++ << ": "; */
+		solve();
+	}
+	return 0;
 }
