@@ -6,7 +6,7 @@ using namespace std;
 class Node
 {
 public:
-	vector<Node*> charList;
+	vector<Node *> charList;
 	int wordCount;
 	int prefixCount;
 
@@ -21,12 +21,12 @@ public:
 		return (charList[ch - 'a'] != NULL);
 	}
 
-	Node * get(char ch)
+	Node *get(char ch)
 	{
 		return charList[ch - 'a'];
 	}
 
-	void put(char ch, Node * node)
+	void put(char ch, Node *node)
 	{
 		charList[ch - 'a'] = node;
 	}
@@ -65,7 +65,7 @@ public:
 class Trie
 {
 private:
-	Node * root;
+	Node *root;
 
 public:
 	Trie()
@@ -75,7 +75,7 @@ public:
 
 	void insert(string word)
 	{
-		Node * node = root;
+		Node *node = root;
 
 		for (char c : word)
 		{
@@ -104,10 +104,9 @@ public:
 		return node->getWordCount();
 	}
 
-
-	int countWordsStartingWith(string & word)
+	int countWordsStartingWith(string &word)
 	{
-		Node * node = root;
+		Node *node = root;
 
 		for (char c : word)
 		{
@@ -120,9 +119,9 @@ public:
 		return node->getPrefixCount();
 	}
 
-	void erase(string & word)
+	void erase(string &word)
 	{
-		Node * node = root;
+		Node *node = root;
 
 		for (char c : word)
 		{
@@ -138,7 +137,6 @@ public:
 		node->deleteEnd();
 	}
 };
-
 
 void solve()
 {
@@ -170,7 +168,7 @@ int main()
 #ifdef ONPC
 	freopen("input.txt", "r", stdin);
 #endif
-	int t {1};
+	int t{1};
 	/* int i {1}; cin >> t; */
 	while (t--)
 	{
