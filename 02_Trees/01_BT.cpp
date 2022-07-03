@@ -4,14 +4,16 @@ using namespace std;
 #define pii pair<int, int>
 #define deb(x) cout << #x << ": " << x << "\n"
 
-class Node
+class TreeNode
 {
 public:
 	int val;
-	Node* left, *right;
+	TreeNode* left, *right;
+
+	TreeNode(int _val): val(_val), left(NULL), right(NULL) {}
 };
 
-void dfs(Node* root)
+void dfs(TreeNode* root)
 {
 	if (!root)
 		return;
@@ -23,12 +25,9 @@ void dfs(Node* root)
 
 void solve()
 {
-	Node* root = new Node();
-	root->val = 3;
-	root->left = new Node();
-	root->left->val = 4;
-	root->right = new Node();
-	root->right->val = 5;
+	TreeNode* root = new TreeNode(3);
+	root->left = new TreeNode(4);
+	root->right = new TreeNode(5);
 
 	dfs(root);
 	cout << endl;
