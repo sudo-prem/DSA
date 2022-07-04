@@ -13,7 +13,7 @@ public:
 	TreeNode(int _val): val(_val), left(NULL), right(NULL) {}
 };
 
-vector<vector<int>> levelorder(TreeNode* root)
+vector<vector<int>> levelOrder(TreeNode* root)
 {
 	vector<vector<int>> res{};
 	queue<TreeNode*> nodeQu{};
@@ -55,7 +55,7 @@ void solve()
 	root->right->right->left = new TreeNode(9);
 	root->right->right->right = new TreeNode(10);
 
-	vector<vector<int>> res = levelorder(root);
+	vector<vector<int>> res = levelOrder(root);
 
 	for (auto level : res)
 	{
