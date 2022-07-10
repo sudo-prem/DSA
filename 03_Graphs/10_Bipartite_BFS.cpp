@@ -1,143 +1,75 @@
-// Problem Link:
-// https://practice.geeksforgeeks.org/problems/bipartite-graph/1
-
-// Coloring of Graph with 2 colors
-// If graph does not contain a Cycle
-//      True
-// If graph contains Cycle
-//      If Cycle has Even no.of nodes
-//          True
-//      If Cycle has Odd no.of nodes
-//          False
-
-// TC: O(n)
-// SC: O(n)
-
 #include <bits/stdc++.h>
 using namespace std;
-
 #define ll long long
+#define pii pair<int, int>
 #define deb(x) cout << #x << ": " << x << "\n"
 
-class Graph
+bool bfs(vector<vector<int>> &graph, vector<int> &visited, int start)
 {
-private:
-    vector<vector<int>> List;
+	queue<int> nodeQu;
+	nodeQu.push(start);
+	int color = 1;
 
-public:
-    Graph(int n);
-    void addEdge(int u, int v);
-    void displayList();
-    bool isBipartiteHelper(int start, vector<int> &visisted);
-    bool isBipartite();
-};
+	while (nodeQu.empty() == false)
+	{
+		int size = nodeQu.size();
+		while (size--)
+		{
+			int curr = nodeQu.front();
+			nodeQu.pop();
 
-Graph::Graph(int n)
-{
-    List.resize(n + 1);
+			for (int node : graph[curr])
+			{
+				if (visited[node] == -1)
+				{
+					visited[node] = color;
+					nodeQu.push(node);
+				}
+				else if (visited[node] != color)
+					return false;
+			}
+		}
+		color = (!color);
+	}
+
+	return true;
 }
 
-void Graph::addEdge(int u, int v)
+bool isBipartite(vector<vector<int>>& graph)
 {
-    List[u].push_back(v);
-    List[v].push_back(u);
-}
+	int n = graph.size();
+	vector<int> visited(n, -1);
 
-void Graph::displayList()
-{
-    int size = List.size();
-    int count{};
-    for (auto i : List)
-    {
-        cout << count++ << ": ";
-        for (auto j : i)
-            cout << j << " ";
-        cout << "\n";
-    }
-    cout << "\n";
-}
+	for (int i = 0; i < n; ++i)
+		if (visited[i] == -1)
+		{
+			visited[i] = 0;
+			if (!bfs(graph, visited, i))
+				return false;
+		}
 
-bool Graph::isBipartiteHelper(int start, vector<int> &colors)
-{
-    queue<int> nodeQu;
-    nodeQu.push(start);
-    colors[start] = 0;
-
-    while (!nodeQu.empty())
-    {
-        int currNode = nodeQu.front();
-        int nextColor = !colors[currNode];
-        nodeQu.pop();
-
-        for (int i : List[currNode])
-        {
-            if (colors[i] == -1)
-            {
-                colors[i] = nextColor;
-                nodeQu.push(i);
-            }
-            else if (colors[i] == !nextColor)
-                return false;
-        }
-    }
-
-    return true;
-}
-
-bool Graph::isBipartite()
-{
-    int n = List.size();
-    // We combine the functionality of visited
-    // and colors into one single vector 'colors'
-    vector<int> colors(n, -1);
-    // State -1 represents not visited
-    // State 0 represents visited and colored with 1st color
-    // State 1 represents visited and colored with 2nd color
-
-    for (int i = 1; i < n; ++i)
-    {
-        if (colors[i] == -1)
-            if (!isBipartiteHelper(i, colors))
-                return false;
-    }
-
-    return true;
+	return true;
 }
 
 void solve()
 {
-    // 1 Based Indexing
-    int n = 5;
-    Graph g(n);
-    vector<int> U{2, 2, 2, 3, 4};
-    vector<int> V{1, 3, 5, 4, 5};
+	vector<vector<int>> graph{{1, 2, 3}, {0, 2}, {0, 1, 3}, {0, 2}};
 
-    // int n = 4;
-    // Graph g(n);
-    // vector<int> U{2, 3};
-    // vector<int> V{3, 4};
-
-    // int n = 4;
-    // Graph g(n);
-    // vector<int> U{1, 2, 3, 1};
-    // vector<int> V{2, 3, 4, 3};
-
-    for (int i = 0; i < U.size(); ++i)
-        g.addEdge(U[i], V[i]);
-
-    // Displays Adjacency List
-    cout << "List: \n";
-    g.displayList();
-
-    g.isBipartite() ? cout << "True\n" : cout << "False\n";
+	cout << isBipartite(graph) << endl;
 }
 
 int main()
 {
-    ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
-    int t{1};
-    // cin >> t;
-    while (t--)
-        solve();
-    return 0;
+	ios_base::sync_with_stdio(0), cin.tie(0);
+#ifdef ONPC
+	freopen("input.txt", "r", stdin);
+#endif
+	int t {1};
+	/* int i {1}; cin >> t; */
+	while (t--)
+	{
+		/* cout << "Case #" << i++ << ": "; */
+		solve();
+	}
+	return 0;
 }

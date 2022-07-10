@@ -1,9 +1,3 @@
-// Problem Link:
-// https://practice.geeksforgeeks.org/problems/bfs-traversal-of-graph/1
-
-// TC: O(n)
-// SC: O(n)
-
 #include <bits/stdc++.h>
 using namespace std;
 #define ll long long

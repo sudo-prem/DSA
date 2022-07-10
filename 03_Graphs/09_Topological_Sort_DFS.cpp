@@ -1,114 +1,72 @@
-// Problem Link:
-// https://practice.geeksforgeeks.org/problems/topological-sort/1
-
-// Use External Stack
-// TC: O(n)
-// SC: O(n)
-
 #include <bits/stdc++.h>
 using namespace std;
-
 #define ll long long
+#define pii pair<int, int>
 #define deb(x) cout << #x << ": " << x << "\n"
 
-class Graph
+void dfs(vector<int> adj[], vector<bool> &visited, stack<int> &nodeSt, int start)
 {
-private:
-    vector<vector<int>> List;
+	for (int node : adj[start])
+	{
+		if (!visited[node])
+		{
+			visited[node] = true;
+			dfs(adj, visited, nodeSt, node);
+		}
+	}
 
-public:
-    Graph(int n);
-    void addEdge(int u, int v);
-    void displayList();
-    void topoHelper(int start, vector<bool> &visited, stack<int> &nodeSt);
-    vector<int> topoSort();
-};
-
-Graph::Graph(int n)
-{
-    List.resize(n + 1);
+	nodeSt.push(start);
 }
 
-void Graph::addEdge(int u, int v)
+vector<int> topoSort(int n, vector<int> adj[])
 {
-    List[u].push_back(v);
-}
+	vector<bool> visited(n, false);
+	stack<int> nodeSt{};
 
-void Graph::displayList()
-{
-    int size = List.size();
-    int count{};
-    for (auto i : List)
-    {
-        cout << count++ << ": ";
-        for (auto j : i)
-            cout << j << " ";
-        cout << "\n";
-    }
-    cout << "\n";
-}
+	for (int i = 0; i < n; ++i)
+		if (!visited[i])
+		{
+			visited[i] = true;
+			dfs(adj, visited, nodeSt, i);
+		}
 
-void Graph::topoHelper(int start, vector<bool> &visited, stack<int> &nodeSt)
-{
-    visited[start] = true;
+	vector<int> res{};
+	while (!nodeSt.empty())
+	{
+		res.push_back(nodeSt.top());
+		nodeSt.pop();
+	}
 
-    for (int i : List[start])
-    {
-        if (!visited[i])
-            topoHelper(i, visited, nodeSt);
-    }
-
-    nodeSt.push(start);
-}
-
-vector<int> Graph::topoSort()
-{
-    int n = List.size();
-    vector<bool> visited(n, false);
-    stack<int> nodeSt;
-    vector<int> res;
-
-    for (int i = 1; i < n; ++i)
-        if (!visited[i])
-            topoHelper(i, visited, nodeSt);
-
-    while (!nodeSt.empty())
-    {
-        res.push_back(nodeSt.top());
-        nodeSt.pop();
-    }
-
-    return res;
+	return res;
 }
 
 void solve()
 {
-    // 1 Based Indexing
-    int n = 4;
-    Graph g(n);
-    vector<int> U{2, 4, 3};
-    vector<int> V{1, 1, 1};
+	int n = 4;
+	vector<int> adj[n];
 
-    for (int i = 0; i < U.size(); ++i)
-        g.addEdge(U[i], V[i]);
+	adj[1].push_back(0);
+	adj[2].push_back(0);
+	adj[3].push_back(0);
 
-    // Displays Adjacency List
-    cout << "List: \n";
-    g.displayList();
-
-    vector<int> res = g.topoSort();
-
-    for (int i : res)
-        cout << i << " ";
-    cout << endl;
+	auto res = topoSort(n, adj);
+	for(int num: res)
+		cout << num << " ";
+	cout << endl;
 }
 
 int main()
 {
-    ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
-    int t{1};
-    // cin >> t;
-    while (t--)
-        solve();
-    return 0;
+	ios_base::sync_with_stdio(0), cin.tie(0);
+#ifdef ONPC
+	freopen("input.txt", "r", stdin);
+#endif
+	int t {1};
+	/* int i {1}; cin >> t; */
+	while (t--)
+	{
+		/* cout << "Case #" << i++ << ": "; */
+		solve();
+	}
+	return 0;
 }

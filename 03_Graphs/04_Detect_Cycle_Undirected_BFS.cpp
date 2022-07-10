@@ -1,125 +1,76 @@
-// Problem Link:
-// https://practice.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1
-
-// TC: O(n)
-// SC: O(n)
-
 #include <bits/stdc++.h>
 using namespace std;
-
 #define ll long long
+#define pii pair<int, int>
 #define deb(x) cout << #x << ": " << x << "\n"
 
-class Graph
+bool bfs(vector<int> adj[], vector<bool> &visited, int start)
 {
-private:
-    vector<vector<int>> List;
+	visited[start] = true;
+	queue<pair<int, int>> nodeQu{};
+	nodeQu.push({start, -1});
 
-public:
-    Graph(int n);
-    void addEdge(int u, int v);
-    void displayList();
-    bool isCyclicHelper(int start, vector<bool> &visisted);
-    bool isCyclic();
-};
-
-Graph::Graph(int n)
-{
-    List.resize(n + 1);
-}
-
-void Graph::addEdge(int u, int v)
-{
-    List[u].push_back(v);
-    List[v].push_back(u);
-}
-
-void Graph::displayList()
-{
-    int size = List.size();
-    int count{};
-    for (auto i : List)
-    {
-        cout << count++ << ": ";
-        for (auto j : i)
-            cout << j << " ";
-        cout << "\n";
-    }
-    cout << "\n";
-}
-
-bool Graph::isCyclicHelper(int start, vector<bool> &visited)
-{
-    queue<pair<int, int>> nodeQu;
-    nodeQu.push({start, -1});
-
-    while (!nodeQu.empty())
-    {
-        int curr = nodeQu.front().first;
-        int prev = nodeQu.front().second;
+	while (nodeQu.empty() == false)
+	{
+		int curr = nodeQu.front().first;
+		int prev = nodeQu.front().second;
 		nodeQu.pop();
 
-        visited[curr] = true;
+		for (int node : adj[curr])
+		{
+			if (visited[node] == false)
+			{
+				visited[node] = true;
+				nodeQu.push({node, curr});
+			}
+			else if (node != prev)
+				return true;
+		}
+	}
 
-        for (int i : List[curr])
-        {
-            if (!visited[i])
-                nodeQu.push({i, curr});
-            else if (prev != i)
-                return true;
-        }
-    }
-
-    return false;
+	return false;
 }
 
-bool Graph::isCyclic()
+bool isCycle(int n, vector<int> adj[])
 {
-    int n = List.size();
-    vector<bool> visited(n, false);
+	vector<bool> visited(n, false);
 
-    for (int i = 1; i < n; ++i)
-        if (!visited[i])
-            if (isCyclicHelper(i, visited))
-                return true;
+	for (int i = 0; i < n; ++i)
+		if (!visited[i])
+			if (bfs(adj, visited, i))
+				return true;
 
-    return false;
+	return false;
 }
 
 void solve()
 {
-    // 1 Based Indexing
-    // int n = 5;
-    // Graph g(n);
-    // vector<int> U{2, 2, 2, 3, 4};
-    // vector<int> V{1, 3, 5, 4, 5};
+	int n = 4;
+	vector<int> adj[n];
+	adj[0].push_back(1);
+	adj[1].push_back(0);
+	adj[1].push_back(2);
+	adj[2].push_back(1);
+	adj[2].push_back(3);
+	adj[3].push_back(2);
+	adj[3].push_back(1);
+	adj[1].push_back(3);
 
-    int n = 4;
-    Graph g(n);
-    vector<int> U{2, 3};
-    vector<int> V{3, 4};
-
-    // int n = 4;
-    // Graph g(n);
-    // vector<int> U{1, 2, 3, 1};
-    // vector<int> V{2, 3, 4, 3};
-
-    for (int i = 0; i < U.size(); ++i)
-        g.addEdge(U[i], V[i]);
-
-    // Displays Adjacency List
-    cout << "List: \n";
-    g.displayList();
-
-    g.isCyclic() ? cout << "True\n" : cout << "False\n";
+	cout << isCycle(n, adj) << endl;
 }
 
 int main()
 {
-    ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
-    int t{1};
-    // cin >> t;
-    while (t--)
-        solve();
-    return 0;
+	ios_base::sync_with_stdio(0), cin.tie(0);
+#ifdef ONPC
+	freopen("input.txt", "r", stdin);
+#endif
+	int t {1};
+	/* int i {1}; cin >> t; */
+	while (t--)
+	{
+		/* cout << "Case #" << i++ << ": "; */
+		solve();
+	}
+	return 0;
 }
