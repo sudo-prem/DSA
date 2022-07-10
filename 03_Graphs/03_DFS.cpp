@@ -1,148 +1,63 @@
-// Problem Link:
-// https://practice.geeksforgeeks.org/problems/depth-first-traversal-for-a-graph/1
-
-// TC: O(n)
-// SC: O(n)
-
 #include <bits/stdc++.h>
 using namespace std;
+#define ll long long
+#define pii pair<int, int>
+#define deb(x) cout << #x << ": " << x << "\n"
 
-class Graph
+void dfs(vector<int> adj[], vector<bool> &visited, vector<int> &res, int start)
 {
-private:
-    vector<vector<int>> List;
-
-public:
-    Graph(int n);
-    void addEdge(int u, int v);
-    void displayList();
-    void DFSHelper(int start, vector<bool> &visited, vector<int> &dfs);
-    vector<int> DFS();
-    void RDFSHelper(int start, vector<bool> &visited, vector<int> &dfs);
-    vector<int> RDFS();
-};
-
-Graph::Graph(int n)
-{
-    List.resize(n + 1);
+	for (int node : adj[start])
+	{
+		if (!visited[node])
+		{
+			visited[node] = true;
+			res.push_back(node);
+			dfs(adj, visited, res, node);
+		}
+	}
 }
 
-void Graph::addEdge(int u, int v)
+vector<int> dfsOfGraph(int n, vector<int> adj[])
 {
-    List[u].push_back(v);
-    List[v].push_back(u);
-}
+	vector<int> res{};
+	vector<bool> visited(n, false);
 
-void Graph::displayList()
-{
-    int size = List.size();
-    int count{};
-    for (auto i : List)
-    {
-        cout << count++ << ": ";
-        for (auto j : i)
-            cout << j << " ";
-        cout << "\n";
-    }
-    cout << "\n";
-}
-
-void Graph::DFSHelper(int start, vector<bool> &visited, vector<int> &dfs)
-{
-    stack<int> nodeSt;
-    nodeSt.push(start);
-    visited[start] = true;
-
-    while (!nodeSt.empty())
-    {
-        int curr = nodeSt.top();
-        nodeSt.pop();
-        dfs.push_back(curr);
-
-        for (int i : List[curr])
-        {
-            if (!visited[i])
-            {
-                visited[i] = true;
-                nodeSt.push(i);
-            }
-        }
-    }
-}
-
-vector<int> Graph::DFS()
-{
-    int n = List.size();
-    vector<bool> visited(n, false);
-    vector<int> dfs;
-
-    for (int i = 1; i < n; ++i)
-        if (!visited[i])
-            DFSHelper(i, visited, dfs);
-
-    return dfs;
-}
-
-void Graph::RDFSHelper(int start, vector<bool> &visited, vector<int> &dfs)
-{
-    visited[start] = true;
-    dfs.push_back(start);
-
-    for (int i : List[start])
-        if (!visited[i])
-            RDFSHelper(i, visited, dfs);
-}
-
-vector<int> Graph::RDFS()
-{
-    int n = List.size();
-    vector<bool> visited(n, false);
-    vector<int> dfs;
-
-    for (int i = 1; i < n; ++i)
-        if (!visited[i])
-            RDFSHelper(i, visited, dfs);
-
-    return dfs;
+	visited[0] = true;
+	res.push_back(0);
+	dfs(adj, visited, res, 0);
+	return res;
 }
 
 void solve()
 {
-    // 1 Based Indexing
-    int n = 7;
-    Graph g(n);
-    vector<int> U{1, 2, 2, 3, 5, 4};
-    vector<int> V{2, 3, 7, 5, 7, 6};
-    for (int i = 0; i < U.size(); ++i)
-        g.addEdge(U[i], V[i]);
+	int n = 4;
+	vector<int> adj[n];
 
-    // Displays Adjacency List
-    cout << "List: \n";
-    g.displayList();
+	adj[0].push_back(1);
+	adj[1].push_back(0);
+	adj[0].push_back(3);
+	adj[3].push_back(0);
+	adj[1].push_back(2);
+	adj[2].push_back(1);
 
-    vector<int> res;
-
-    // Depth First Search (Iterative)
-    cout << "DFS: \n";
-    res = g.DFS();
-    for (auto i : res)
-        cout << i << " ";
-    cout << "\n";
-
-    // Depth First Search (Recursive)
-    cout << "RDFS: \n";
-    res = g.RDFS();
-    for (auto i : res)
-        cout << i << " ";
-    cout << "\n";
+	auto res = dfsOfGraph(n, adj);
+	for (int num : res)
+		cout << num << " ";
+	cout << endl;
 }
 
 int main()
 {
-    ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
-    int t{1};
-    // cin >> t;
-    while (t--)
-        solve();
-    return 0;
+	ios_base::sync_with_stdio(0), cin.tie(0);
+#ifdef ONPC
+	freopen("input.txt", "r", stdin);
+#endif
+	int t {1};
+	/* int i {1}; cin >> t; */
+	while (t--)
+	{
+		/* cout << "Case #" << i++ << ": "; */
+		solve();
+	}
+	return 0;
 }
