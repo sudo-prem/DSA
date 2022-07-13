@@ -1,16 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define ll long long
+#define pii pair<int, int>
 #define deb(x) cout << #x << ": " << x << "\n"
 
-class disjointSet
+class DisjointSet
 {
 private:
 	vector<int> parent;
 	vector<int> weight;
 
 public:
-	disjointSet(int n)
+	DisjointSet(int n)
 	{
 		parent.resize(n);
 		weight.resize(n);
@@ -35,7 +36,7 @@ public:
 
 		if (weight[parent1] > weight[parent2])
 			parent[parent2] = parent1;
-		else if (weight[parent1] < weight[parent2])
+		else if (weight[parent2] > weight[parent1])
 			parent[parent1] = parent2;
 		else
 		{
@@ -45,42 +46,46 @@ public:
 	}
 };
 
+long long countPairs(int n, vector<vector<int>>& edges)
+{
+	DisjointSet djs(n);
+	for (auto edge : edges)
+		djs.weightedUnion(edge[0], edge[1]);
+
+	unordered_map<int, int> count{};
+	for (int i = 0; i < n; ++i)
+		count[djs.collapsingFind(i)]++;
+
+	long long res{}, sum{};
+	for (auto itr : count)
+	{
+		res += (itr.second * sum);
+		sum += itr.second;
+	}
+
+	return res;
+}
+
 void solve()
 {
-	int n = 3;
-	disjointSet ds = disjointSet(n);
+	int n = 7;
+	vector<vector<int>> edges{{0, 2}, {0, 5}, {2, 4}, {1, 6}, {5, 4}};
 
-	if (ds.collapsingFind(2) == ds.collapsingFind(3))
-		cout << "Same Parent\n";
-	else
-		cout << "Different Parent\n";
-
-	ds.weightedUnion(2, 3);
-
-	if (ds.collapsingFind(2) == ds.collapsingFind(3))
-		cout << "Same Parent\n";
-	else
-		cout << "Different Parent\n";
-
-	if (ds.collapsingFind(1) == ds.collapsingFind(2))
-		cout << "Same Parent\n";
-	else
-		cout << "Different Parent\n";
-
-	ds.weightedUnion(1, 2);
-
-	if (ds.collapsingFind(1) == ds.collapsingFind(2))
-		cout << "Same Parent\n";
-	else
-		cout << "Different Parent\n";
+	cout << countPairs(n, edges) << endl;
 }
 
 int main()
 {
-	ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
-	int t{1};
-	// cin >> t;
+	ios_base::sync_with_stdio(0), cin.tie(0);
+#ifdef ONPC
+	freopen("input.txt", "r", stdin);
+#endif
+	int t {1};
+	/* int i {1}; cin >> t; */
 	while (t--)
+	{
+		/* cout << "Case #" << i++ << ": "; */
 		solve();
+	}
 	return 0;
 }
