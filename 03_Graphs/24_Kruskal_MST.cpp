@@ -1,136 +1,117 @@
-// Problem Link:
-// https://practice.geeksforgeeks.org/problems/minimum-spanning-tree/1#
-
-// Priority Queue
-// TC: O(n*log(n) + n*(4*alpha)) (4*alpha is the time taken by disjoint set to perform find, union)
-// SC: O(n)
-
 #include <bits/stdc++.h>
 using namespace std;
+#define ll long long
+#define pii pair<int, int>
+#define deb(x) cout << #x << ": " << x << "\n"
 
-class disjointSet
+class DisjointSet
 {
 private:
-    vector<int> parent;
-    vector<int> weight;
+	vector<int> parent;
+	vector<int> weight;
 
 public:
-    disjointSet(int n)
-    {
-        for (int i = 0; i < n; ++i)
-        {
-            parent.push_back(i);
-            weight.push_back(0);
-        }
-    }
+	DisjointSet(int n)
+	{
+		parent.resize(n);
+		weight.resize(n);
 
-    int collapsingFind(int node)
-    {
-        if (parent[node] == node)
-            return node;
-        parent[node] = collapsingFind(parent[node]);
-        return parent[node];
-    }
+		for (int i = 0; i < n; ++i)
+			parent[i] = i;
+	}
 
-    void weightedUnion(int node1, int node2)
-    {
-        int parent1 = collapsingFind(node1);
-        int parent2 = collapsingFind(node2);
+	int collapsingFind(int node)
+	{
+		if (parent[node] == node)
+			return node;
 
-        if (weight[parent1] > weight[parent2])
-            parent[parent2] = parent1;
-        else if (weight[parent2] > weight[parent2])
-            parent[parent1] = parent2;
-        else
-        {
-            parent[parent2] = parent1;
-            weight[parent1]++;
-        }
-    }
+		parent[node] = collapsingFind(parent[node]);
+		return parent[node];
+	}
+
+	void weightedUnion(int node1, int node2)
+	{
+		int parent1 = collapsingFind(node1);
+		int parent2 = collapsingFind(node2);
+
+		if (weight[parent1] > weight[parent2])
+			parent[parent2] = parent1;
+		else if (weight[parent2] > weight[parent1])
+			parent[parent1] = parent2;
+		else
+		{
+			parent[parent2] = parent1;
+			weight[parent1]++;
+		}
+	}
 };
 
-class Graph
+vector<vector<vector<int>>> kruskal(vector<vector<vector<int>>> &adj)
 {
-private:
-    vector<vector<pair<int, int>>> List;
+	int n = adj.size();
+	priority_queue<pair<int, pii>, vector<pair<int, pii>>, greater<pair<int, pii>>> minHeap;
+	vector<vector<vector<int>>> res(n);
 
-public:
-    Graph(int n);
-    void addEdge(int u, int v, int w);
-    void Display();
+	for (int i = 0; i < n; ++i)
+		for (auto &itr : adj[i])
+			minHeap.push({itr[1], {i, itr[0]}});
 
-    vector<pair<int, int>> kruskals();
-    void displayMST(vector<pair<int, int>> &mstEdges);
-};
+	DisjointSet djs(n);
 
-Graph::Graph(int n)
-{
-    List.resize(n);
+	while (!minHeap.empty())
+	{
+		int edgeWeight = minHeap.top().first;
+		int node1 = minHeap.top().second.first;
+		int node2 = minHeap.top().second.second;
+		minHeap.pop();
+
+		if (djs.collapsingFind(node1) != djs.collapsingFind(node2))
+		{
+			djs.weightedUnion(node1, node2);
+			res[node1].push_back({node2, edgeWeight});
+			res[node2].push_back({node1, edgeWeight});
+		}
+	}
+
+	return res;
 }
 
-void Graph::addEdge(int u, int v, int w)
+void solve()
 {
-    List[u].push_back({v, w});
-    List[v].push_back({u, w});
-}
+	int n = 5;
+	vector<vector<vector<int>>> adj(n);
+	adj[0] = {{1, 2}, {3, 6}};
+	adj[1] = {{0, 2}, {2, 3}, {3, 8}, {4, 5}};
+	adj[2] = {{1, 3}, {4, 7}};
+	adj[3] = {{0, 6}, {1, 8}};
+	adj[4] = {{1, 5}, {2, 7}};
 
-vector<pair<int, int>> Graph::kruskals()
-{
-    int n = List.size();
-    vector<pair<int, int>> mstEdges{};
-    disjointSet ds(n);
+	vector<vector<vector<int>>> mst = kruskal(adj);
 
-    // Pushing negative weights so that max-heap behaves as a minheap
-    priority_queue<pair<int, pair<int, int>>> minHeap;
+	// Skip (i = 0) - root of MST
+	for (int i = 1; i < n; ++i)
+	{
+		cout << i << " - ";
+		int m = mst[i].size();
+		for (int j = 0; j < m; ++j)
+			cout << "[" << mst[i][j].front() << " " << mst[i][j].back() << "] ";
+		cout << endl;
+	}
 
-    // Inserting all the edges to the heap
-    for (int i = 0; i < n; ++i)
-        for (auto j : List[i])
-            minHeap.push({-j.second, {i, j.first}});
-
-    while (!minHeap.empty())
-    {
-        // Getting the current minimum
-        auto curr = minHeap.top();
-        minHeap.pop();
-
-        int node1 = curr.second.first;
-        int node2 = curr.second.second;
-
-        // if both does not have the same parent, we can say that they wont form a cycle
-        // hence can be considered for MST and weighted union should be performed
-        if (ds.collapsingFind(node1) != ds.collapsingFind(node2))
-        {
-            mstEdges.push_back({node1, node2});
-            ds.weightedUnion(node1, node2);
-        }
-    }
-
-    return mstEdges;
-}
-
-void Graph::displayMST(vector<pair<int, int>> &mstEdges)
-{
-    for (auto i : mstEdges)
-        for (auto j : List[i.first])
-            if (j.first == i.second)
-                cout << i.first << " to " << i.second << " - " << j.second << endl;
 }
 
 int main()
 {
-    int n = 5;
-    vector<int> U{0, 0, 1, 1, 1, 2};
-    vector<int> V{1, 3, 2, 4, 3, 4};
-    vector<int> W{2, 6, 3, 5, 8, 7};
-
-    Graph G(n);
-
-    for (int i = 0; i < U.size(); ++i)
-        G.addEdge(U[i], V[i], W[i]);
-
-    vector<pair<int, int>> mstEdges = G.kruskals();
-    G.displayMST(mstEdges);
-
-    return 0;
+	ios_base::sync_with_stdio(0), cin.tie(0);
+#ifdef ONPC
+	freopen("input.txt", "r", stdin);
+#endif
+	int t {1};
+	/* int i {1}; cin >> t; */
+	while (t--)
+	{
+		/* cout << "Case #" << i++ << ": "; */
+		solve();
+	}
+	return 0;
 }
