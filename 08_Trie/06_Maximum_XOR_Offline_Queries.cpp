@@ -3,12 +3,12 @@ using namespace std;
 #define ll long long
 #define deb(x) cout << #x << ": " << x << "\n"
 
-class Node
+class TreeNode
 {
 public:
-	vector<Node*> bitList;
+	vector<TreeNode*> bitList;
 
-	Node()
+	TreeNode()
 	{
 		bitList.resize(2);
 	}
@@ -17,30 +17,30 @@ public:
 class Trie
 {
 private:
-	Node* root;
+	TreeNode* root;
 
 public:
 	Trie()
 	{
-		root = new Node();
+		root = new TreeNode();
 	}
 
 	void insert(int num)
 	{
-		Node *node = root;
+		TreeNode *node = root;
 
 		for (int i = 31; i >= 0; --i)
 		{
 			bool bit = (num >> i) & 1;
 			if (!node->bitList[bit])
-				node->bitList[bit] = new Node();
+				node->bitList[bit] = new TreeNode();
 			node = node->bitList[bit];
 		}
 	}
 
 	int getMax(int num)
 	{
-		Node* node = root;
+		TreeNode* node = root;
 		int res{};
 
 		for (int i = 31; i >= 0; --i)
@@ -78,10 +78,13 @@ vector<int> maxXorQueries(vector<int> &arr, vector<vector<int>> &queries)
 		while (index < m and arr[index] <= offlineQueries[i].first)
 			t->insert(arr[index++]);
 
+		int queryIndex = offlineQueries[i].second.second;
+		int queryNum = offlineQueries[i].second.first;
+
 		if (index == 0)
-			res[offlineQueries[i].second.second] = -1;
+			res[queryIndex] = -1;
 		else
-			res[offlineQueries[i].second.second] = t->getMax(offlineQueries[i].second.first);
+			res[queryIndex] = t->getMax(queryNum);
 	}
 
 	return res;

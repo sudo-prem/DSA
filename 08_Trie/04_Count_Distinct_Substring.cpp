@@ -3,12 +3,12 @@ using namespace std;
 #define ll long long
 #define deb(x) cout << #x << ": " << x << "\n"
 
-class Node
+class TrieNode
 {
 public:
-	vector<Node*> charList;
+	vector<TrieNode*> charList;
 
-	Node()
+	TrieNode()
 	{
 		charList.resize(26);
 	}
@@ -17,27 +17,27 @@ public:
 class Trie
 {
 private:
-	Node* root;
+	TrieNode* root;
 
 public:
 	int res;
 
 	Trie()
 	{
-		root = new Node();
+		root = new TrieNode();
 		res = 0;
 	}
 
 	void insert(string s)
 	{
-		Node* node = root;
+		TrieNode* node = root;
 
 		for (char c : s)
 		{
 			if (!node->charList[c - 'a'])
 			{
 				res++;
-				node->charList[c - 'a'] = new Node();
+				node->charList[c - 'a'] = new TrieNode();
 			}
 			node = node->charList[c - 'a'];
 		}

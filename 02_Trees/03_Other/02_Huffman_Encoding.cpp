@@ -27,7 +27,7 @@ public:
 	}
 };
 
-void preorder(TreeNode *root, string s, vector<string> &res)
+void preorder(TreeNode *root, string &s, vector<string> &res)
 {
 	if (!root)
 		return;
@@ -38,39 +38,45 @@ void preorder(TreeNode *root, string s, vector<string> &res)
 		return;
 	}
 
-	preorder(root->left, s + '0', res);
-	preorder(root->right, s + '1', res);
+	s.push_back('0');
+	preorder(root->left, s, res);
+	s.pop_back();
+
+	s.push_back('1');
+	preorder(root->right, s, res);
+	s.pop_back();
 }
 
-vector<string> huffmanCodes(string &s, vector<int> &freq)
+vector<string> huffmanCodes(string &word, vector<int> &freq)
 {
-	int n = s.size();
+	int n = word.size();
 	vector<string> res{};
-	priority_queue<TreeNode *, vector<TreeNode *>, comparator> pq;
+	priority_queue<TreeNode *, vector<TreeNode *>, comparator> maxHeap;
 
-	// Push all nodes in pq
+	// Push all nodes in maxHeap
 	for (int i : freq)
 	{
 		TreeNode *temp = new TreeNode(i);
-		pq.push(temp);
+		maxHeap.push(temp);
 	}
 
-	for (int i = 1; i < n; ++i)
+	while (maxHeap.size() > 1)
 	{
-		TreeNode *x = pq.top();
-		pq.pop();
+		TreeNode *x = maxHeap.top();
+		maxHeap.pop();
 
-		TreeNode *y = pq.top();
-		pq.pop();
+		TreeNode *y = maxHeap.top();
+		maxHeap.pop();
 
 		TreeNode *temp = new TreeNode(x->freq + y->freq);
 		temp->left = x;
 		temp->right = y;
-		pq.push(temp);
+		maxHeap.push(temp);
 	}
 
-	TreeNode *currTop = pq.top();
-	preorder(currTop, "", res);
+	TreeNode *currTop = maxHeap.top();
+	string s{};
+	preorder(currTop, s, res);
 
 	return res;
 }

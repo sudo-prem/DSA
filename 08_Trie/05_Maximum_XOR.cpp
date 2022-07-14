@@ -3,12 +3,12 @@ using namespace std;
 #define ll long long
 #define deb(x) cout << #x << ": " << x << "\n"
 
-class Node
+class TrieNode
 {
 public:
-	vector<Node*> bitList;
+	vector<TrieNode*> bitList;
 
-	Node()
+	TrieNode()
 	{
 		bitList.resize(2);
 	}
@@ -17,42 +17,44 @@ public:
 class Trie
 {
 private:
-	Node* root;
+	TrieNode* root;
 
 public:
 	Trie()
 	{
-		root = new Node();
+		root = new TrieNode();
 	}
 
 	void insert(int num)
 	{
-		Node* node = root;
+		TrieNode* node = root;
 
 		for (int i = 31; i >= 0; --i)
 		{
-			bool bit = (num >> i) & 1;
-			if (!node->bitList[bit])
-				node->bitList[bit] = new Node();
-			node = node->bitList[bit];
+			// Find the MSB
+			bool msb = (num >> i) & 1;
+			// If the TrieNode is null, create one
+			if (!node->bitList[msb])
+				node->bitList[msb] = new TrieNode();
+			node = node->bitList[msb];
 		}
 	}
 
 	int getMax(int num)
 	{
-		Node *node = root;
+		TrieNode* node = root;
 		int res{};
 
 		for (int i = 31; i >= 0; --i)
 		{
-			bool bit = (num >> i) & 1;
-			if (node->bitList[!bit])
+			bool msb = (num >> i) & 1;
+			if (node->bitList[!msb])
 			{
 				res |= (1 << i);
-				node = node->bitList[!bit];
+				node = node->bitList[!msb];
 			}
 			else
-				node = node->bitList[bit];
+				node = node->bitList[msb];
 		}
 
 		return res;
